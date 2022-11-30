@@ -7,6 +7,6 @@ $dbName="pr_orgz_ev";
 
 $conn=mysqli_connect($serverName, $dbUserName, $dbPassword, $dbName);
 
-if(!conn){
+if(!$conn){
     die("Connection failed".mysqli_connect_error());
 }
