@@ -1,0 +1,27 @@
+.nav{
+    width: 100%;
+    text-align: center;
+    
+}
+
+.nav h1{
+    font-family: 'Playfair Display', serif;
+    color: rgb(37, 35, 35);
+    
+}
+
+.nav ul{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.nav ul li{
+    list-style-type: none;
+    padding: 10px;
+}
+
+.nav ul li a{
+   text-decoration: none;
+   color: rgb(37, 35, 35);
+}
