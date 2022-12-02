@@ -1,27 +1,67 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 .nav{
     width: 100%;
     text-align: center;
-    
+    position: sticky;
+    top: 0;
+    background-color: rgb(247, 246, 237);
+    height: 100px;
 }
 
 .nav h1{
     font-family: 'Playfair Display', serif;
-    color: rgb(37, 35, 35);
+    color: rgb(186, 15, 15);
     
 }
 
-.nav ul{
+.meniuOrizantala{
     display: flex;
-    align-items: center;
     justify-content: center;
 }
 
-.nav ul li{
+.nav .meniuOrizantala li{
     list-style-type: none;
     padding: 10px;
 }
 
-.nav ul li a{
+.nav .meniuOrizantala li a{
    text-decoration: none;
    color: rgb(37, 35, 35);
+}
+
+.evenimente {  
+    display: none;
+    align-items: flex-start;
+    position: absolute;
+    background-color:rgb(247, 246, 237);
+}
+
+.evenimente a{
+    padding-top: 7px;
+    padding-bottom:7px;
+}
+
+.hoverul:hover .evenimente{
+ display: flex;
+ flex-direction: column;
+} 
+
+.descriereppag p{
+    font-size: 1.2rem;
+    line-height: 1.5rem;
+}
+
+.descriereppag{
+    width: 50%;
+    padding: 15px;
+    text-align: justify;
+}
+
+.homebkg{
+    background-image: url(../images/floriBaloane.webp);
+    height: 100vh;
 }

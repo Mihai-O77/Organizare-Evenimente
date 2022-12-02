@@ -1,5 +1,6 @@
 <?php
 
+//functii sign up
 
 function insertUser($conn, $username, $email, $password,  $firstName, $lastName){
  $insert = "INSERT INTO users ( usersUsername, usersEmail, usersPassword, usersFirst, usersLast) VALUE (?,?,?,?,?)";
@@ -99,4 +100,37 @@ function userExists($conn, $username, $email){
     }
     mysqli_stmt_close($stmt);
     exit();
+}
+
+//functii login
+
+function emptyInputLogin($username, $password){
+    $result;
+    if(empty($username) || empty($password)){
+     $result= true;
+    }
+    else{
+        $result= false;
+    }
+    return $result;
+}
+
+function loginUser($conn, $username, $password){
+  $userExist = userExists($conn, $username, $username);
+  if($userExist === false){
+    header("location: ../login.php?error=wronglogin");
+    exit();
+  }
+  $pwdHashed= $userExist["usersPassword"];
+  $checkPwd= password_verify($password, $pwdHashed);
+  if($checkPwd === false){
+    header("location: ../login.php?error=wronglogin");
+    exit();
+  }
+  else if($checkPwd === true){
+    session_start();
+    $_SESSION["username"] = $userExist["usersUsername"];
+    header("location: ../index.php");
+    exit();
+  }
 }

@@ -1,3 +1,7 @@
+<?php
+session_start();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,9 +19,30 @@
 
 <div class="nav">
     <h1>Organizare Evenimente</h1>
-    <ul>
-        <li> <a href="index.php">home</a> </li>
-        <li> <a href="login.php">login</a> </li>
-        <li> <a href="signup.php">signup</a> </li>
+    <ul class="meniuOrizantala">
+        <li> <a href="index.php">Home</a> </li>
+        <?php
+        if(isset($_SESSION["username"])){
+           echo "<li> <a href='profile.php'>Profile</a> </li>";
+           echo "<li class='hoverul'>Evenimente
+            <div class='evenimente'>
+               <a href='nunta.php'>Nunta</a>
+               <a href='botez.php'>Botez</a>
+               <a href='petrCopii.php'>Petrecere copii</a>
+               <a href='conferinta.php'>Conferinta</a>
+               <a href='aniversare.php'>Aniversare</a> 
+            </div>
+            
+        </li>";
+       echo "<li> <a href='includes/logout.inc.php'>Log out</a> </li>";
+        }
+        else{
+        echo "<li> <a href='login.php'>Login</a> </li>";
+        echo "<li> <a href='signup.php'>Sign up</a> </li>";
+        }
+        ?>
+        
+        
+        
     </ul>
 </div>
