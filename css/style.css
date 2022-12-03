@@ -3,6 +3,11 @@
     padding: 0;
     box-sizing: border-box;
 }
+
+html{
+    background-image: url(../images/floriBaloane.webp);
+}
+
 .nav{
     width: 100%;
     text-align: center;
@@ -62,6 +67,5 @@
 }
 
 .homebkg{
-    background-image: url(../images/floriBaloane.webp);
     height: 100vh;
 }
