@@ -17,8 +17,9 @@ include_once("header.php");
  <?php 
  if(isset($_GET["error"])){
   switch($_GET["error"]){
-    case "invalidusername": echo "Usernamul nu este valid"; break;
+    case "invalidusername": echo "Username-ul nu este valid"; break;
     case "invalidemail": echo "Email-ul nu este valid"; break;
+    case "invalidpassword": echo "Parola trebuie sa fie intre 5 si 16 caractere"; break;
     case "pwdsdontmatch": echo "Parolele nu se potrivesc"; break;
     case "invalidFname": echo "Prenumele este invalid"; break;
     case "invalidLname": echo "Numele de familie este invalid"; break;

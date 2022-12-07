@@ -5,7 +5,7 @@
 }
 
 html{
-    background-image: url(../images/floriBaloane.webp);
+    background-image: url(../images/floriBaloane.jpeg);
 }
 
 .nav{
@@ -68,4 +68,53 @@ html{
 
 .homebkg{
     height: 100vh;
+}
+
+.divtop{
+    display: flex;
+    justify-content: space-evenly;
+    padding: 10px;
+    background-color:rgba(247, 246, 237, 0.8) ;
+    margin: 20px auto;
+    width: 80%;
+    border-radius: 15px;
+}
+
+.imgtop{
+   width: 400px;
+}
+
+.imagheaderdreapta{
+   width: 400px;
+   border-radius: 15px;
+}
+
+.descr{
+    width: 50%;
+    font-size: 1.5rem;
+}
+
+.options{
+    font-size: 1.3rem;
+    display: flex;
+    justify-content: space-evenly;
+    background-color:rgba(247, 246, 237, 0.8) ;
+    margin: 20px auto;
+    width: 80%;
+    border-radius: 15px;
+    padding: 10px;
+    transition: all 2;
+}
+
+.options li:hover{
+  color: rgb(0, 140, 94);
+}
+
+.none{
+    display: none;
+}
+
+.box input:checked + div{
+    display: flex;
+    flex-direction: column;
 }

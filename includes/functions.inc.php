@@ -13,6 +13,7 @@ function insertUser($conn, $username, $email, $password,  $firstName, $lastName)
  mysqli_stmt_bind_param($stmt, "sssss", $username, $email, $hashedPwd, $firstName, $lastName);
  mysqli_stmt_execute($stmt);
  mysqli_stmt_close($stmt);
+ header("location: ../login.php");
  exit();
 }
 
@@ -29,7 +30,7 @@ return $result;
 
 function invalidUsername($username){
 $result;
-if(!preg_match("/^[a-zA-Z0-9]*$/", $username)){
+if(!preg_match("/^[a-zA-Z0-9]+$/", $username)){
 $result= true;
 }
 else{
@@ -49,6 +50,17 @@ function invalidEmail($email){
  return $result;
 }
 
+function invalidPassword($password){
+  $result;
+  if(!preg_match("/[\w\W]{5,16}/", $password)){
+  $result= true;
+  }
+  else{
+    $result= false;
+  }
+  return $result;
+  }
+
 function pwdMatch($password, $passwordr){
 $result;
 if($password!==$passwordr){
@@ -62,7 +74,7 @@ return $result;
 
 function invalidFname($firstName){
     $result;
-    if(!preg_match("/^[a-zA-Z]*$/", $firstName)){
+    if(!preg_match("/^[A-Z][a-z]*(\s[A-Z])?[a-z]*$/", $firstName)){
     $result= true;
     }
     else{
@@ -73,7 +85,7 @@ function invalidFname($firstName){
 
 function invalidLname($lastName){
     $result;
-    if(!preg_match("/^[a-zA-Z]*$/", $lastName)){
+    if(!preg_match("/^[A-Z][a-z]*$/", $lastName)){
     $result= true;
     }
     else{
