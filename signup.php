@@ -3,7 +3,7 @@ include_once("header.php");
 ?>
 
 <section>
- <div>
+ <div class="login">
    <form action="includes/signup.inc.php" method="post">
     Username<br><input type="text" name="username"><br><br>
     Email<br><input type="email" name="email"><br><br>
@@ -14,7 +14,8 @@ include_once("header.php");
     <button name="submit" type="submit">Sign up</button>
    </form> 
  </div>
- <?php 
+ <div class="msgError"> 
+ <?php
  if(isset($_GET["error"])){
   switch($_GET["error"]){
     case "invalidusername": echo "Username-ul nu este valid"; break;
@@ -27,7 +28,8 @@ include_once("header.php");
     case "useralreadyexists": echo "Utilizatorul exista deja"; break;
   }  
  }
- ?>   
+ ?>
+ </div>   
 </section>
 
 <?php
