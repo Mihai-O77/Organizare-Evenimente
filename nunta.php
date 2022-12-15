@@ -1,5 +1,6 @@
 <?php 
 include_once("header.php");
+require_once("includes/functions.inc.php");
 ?>
 
 <section>
@@ -22,6 +23,7 @@ Vei primi raspuns la toate intrebarile tale si te vei bucura de o nunta ca-n pov
 <form class="form" action="includes/nunta.inc.php" method="post">
 <div class="options">
 
+<label><input type="date" name="date">Data nuntii</label>
 <ol> Servicii profesioniste:
  <li><label class="box"><input type="checkbox" name="fotograf"> Fotograf
     <div class="none">
@@ -77,11 +79,30 @@ Vei primi raspuns la toate intrebarile tale si te vei bucura de o nunta ca-n pov
 <li><label><input type="checkbox" name="mancare[]" value="Ice cream bar"> Ice cream bar</label></li>
 <li><label><input type="checkbox" name="mancare[]" value="Cocktail bar"> Cocktail bar</label></li>
 <li><label id="tort"><input type="checkbox" name="mancare[]" value="Tort"> Tort nunta</label></li>
-<li><label id="meniu"><input type="checkbox" name="mancare[]" value="Meniu"> Meniu</label></li>
+<li><label class="box"><input type="checkbox" name="mancare[]" value="Meniu"> Meniu
+        <div class="none">
+            <label class="showmenu"><input type="radio" name="meniu" value="Meniu 1" checked> Meniu 1
+            <div id="menu1" class="divmenu none"><div class="divflex"><div class="menutitle"><span>* Menu 1 * </span> Pofta buna ! </div><div class="textmenu"><ul><?php menulist("meniuri/menu1.txt");
+            ?>
+            </ul> </div></div></div></label>    
+            <label class="showmenu"><input type="radio" name="meniu" value="Meniu 2"> Meniu 2
+            <div id="menu2" class="divmenu none"><div class="divflex"><div class="menutitle"><span>* Menu 2 * </span> Pofta buna ! </div><div class="textmenu"><ul><?php menulist("meniuri/menu2.txt");
+            ?>
+            </ul></div></div> </div></label>
+            <label class="showmenu"><input type="radio" name="meniu" value="Meniu 3"> Meniu 3
+            <div id="menu3" class="divmenu none"><div class="divflex"><div class="menutitle"><span>* Menu 3 * </span> Pofta buna ! </div><div class="textmenu"><ul><?php menulist("meniuri/menu3.txt");
+            ?>
+            </ul></div></div></div></label>
+            <label class="showmenu"><input type="radio" name="meniu" value="Meniu 4"> Meniu 4
+            <div id="menu4" class="divmenu none"><div class="divflex"><div class="menutitle"><span>* Menu 4 * </span> Pofta buna ! </div><div class="textmenu"><ul><?php menulist("meniuri/menu4.txt");
+            ?>
+            </ul> </div></div></div></label>
+        </div>
+</label></li>
 </ol>
 
 </div>
-<button class="btnConfirm" type="submit" name="submit"> Confirm</button>
+<button class="btnConfirm" type="submit" name="confirm"> Confirm</button>
 </form>
 </section>
 

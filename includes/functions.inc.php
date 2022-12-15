@@ -142,7 +142,18 @@ function loginUser($conn, $username, $password){
   else if($checkPwd === true){
     session_start();
     $_SESSION["username"] = $userExist["usersUsername"];
+    $_SESSION["userid"] = $userExist["usersId"];
     header("location: ../index.php");
     exit();
+  }
+}
+
+
+// functii nunta
+
+function menuList($text){
+  $lines = file("$text");
+  foreach($lines as $line){
+    echo "<li>$line</li>";
   }
 }

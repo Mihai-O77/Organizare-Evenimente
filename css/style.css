@@ -6,6 +6,7 @@
 
 html{
     background-image: url(../images/floriBaloane.jpeg);
+    font-size: 18px;
 }
 
 .nav{
@@ -123,11 +124,12 @@ html{
 .options{
     font-size: 1.3rem;
     display: flex;
-    justify-content: space-evenly;
+    justify-content: space-between;
     margin: 20px auto;
     width: 80%;
     border-radius: 15px;
     padding: 10px;
+    position: relative;
 }
 
 .options li:hover{
@@ -136,6 +138,11 @@ html{
 
 .none{
     display: none;
+    color: black;
+}
+
+.none label:hover{
+    color: rgb(0, 140, 94);
 }
 
 .box input:checked + div{
@@ -202,4 +209,54 @@ padding: 7px;
 color: dimgray;
 text-shadow: 1px 1px 1px rgb(185, 230, 235);
 font-size: 1.2rem;
+}
+
+
+.showmenu input:checked + .divmenu{
+display: block;
+}
+
+.divmenu{
+position: absolute;
+font-size: 1.3rem;
+padding: 15px;
+color: rgb(77, 77, 77);
+
+bottom: -630px;
+left: 0px;
+width: 100%;
+min-height: 500px;
+
+background-color: rgba(250, 228, 195, 0.8);
+box-shadow: 0px 0px 10px rgba(240, 140, 26, 0.8) inset, 0px 0px 20px rgba(247, 232, 28, 0.658) inset;
+}
+
+.divflex{
+  display: flex;
+  width: 100%;  
+}
+
+.menutitle{
+font-size: 1.3rem;
+font-weight: bold;
+padding: 10px;
+width: 80%;
+padding-top: 100px;
+line-height: 70px;
+text-align: center;
+}
+
+.menutitle span{
+    font-size: 2.3rem;
+    color: rgb(77, 77, 77);
+}
+
+.textmenu{
+    padding: 20px;
+}
+
+.textmenu ul li{
+    list-style-type: circle;
+    color: rgb(77, 77, 77);
+    letter-spacing: 2px;
 }

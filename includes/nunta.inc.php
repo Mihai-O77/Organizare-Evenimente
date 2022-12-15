@@ -1,10 +1,12 @@
 <?php
 
-if(isset($_POST["submit"])){
+session_start();
+
+if(isset($_POST["confirm"])){
 
     require_once "connection.db.php";
     require_once "functions.inc.php";
-
+$ndate = $_POST["date"];
 $array_servici = array();
 $array_decor = array();
 $array_catering = array();
@@ -81,8 +83,11 @@ if(isset($_POST["mancare"])){
 }
   
 
-print_r(json_encode($array_servici));echo "<br>";
-print_r(json_encode($array_decor));echo "<br>";
-print_r(json_encode($array_catering));
+$userNunta = $_SESSION["userid"];
+$servicii = json_encode($array_servici);
+$decor = json_encode($array_decor);
+$catering = json_encode($array_catering);
+
+createNunta($conn, $userNunta, $servicii, $decor. $catering, $ndate);
 }
 
