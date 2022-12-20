@@ -103,6 +103,17 @@ Vei primi raspuns la toate intrebarile tale si te vei bucura de o nunta ca-n pov
 
 </div>
 <button class="btnConfirm" type="submit" name="confirm"> Confirm</button>
+<div class="nuntaError">
+<?php
+if(isset($_GET["error"])){
+switch($_GET["error"]){
+    case "emptyoptions": echo "Nu ati ales nicio optiune";break;
+    case "emptydate": echo "Nu a fost selectata o data";break;
+    case "invaliddate": echo "Data nuntii trebuie sa fie peste cel putin 1 saptamana de la data actuala";break; 
+}    
+}
+?>
+</div>
 </form>
 </section>
 

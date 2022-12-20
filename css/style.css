@@ -260,3 +260,70 @@ text-align: center;
     color: rgb(77, 77, 77);
     letter-spacing: 2px;
 }
+
+.nuntaError{
+    color: red;
+}
+
+.profile{
+    height: 100vh;
+    padding: 10px;
+}
+
+.menuprofile{
+    width: 20%;
+    padding: 5px;
+}
+
+.meniuBtn{
+    font-size: 1.2rem;
+    padding: 5px;
+    background-color: burlywood;
+    border: none;
+    border-bottom: 1px solid rgb(112, 112, 112);
+    cursor: pointer;
+    width: 100%;
+    text-align: left;
+}
+
+.meniuBtn span{
+    font-weight: bold;
+    float: right;
+}
+
+.meniuBtn:hover{
+    background-color: rgb(28, 23, 23);
+    color:burlywood ;
+}
+
+.details{
+    width: 80%;
+    padding: 7px;
+    margin-bottom: 20px;
+}
+
+.datecont{
+    background-color: burlywood;
+    width: 400px;
+    min-height: 200px;
+    padding: 10px;
+    font-size: 1.2rem;
+    color: rgb(80, 80, 80);
+}
+
+.datecont ul li{
+    list-style-type: none;
+    margin-bottom: 30px;
+}
+
+.datecont button{
+    color: darkcyan;
+    padding: 5px;
+    font-weight: bold;
+    border: none;
+    border-top: 1px solid rgb(112, 112, 112);
+    cursor: pointer;
+    width: 100%;
+    text-align: center;
+    background-color: burlywood;
+}

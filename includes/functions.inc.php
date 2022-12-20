@@ -143,6 +143,9 @@ function loginUser($conn, $username, $password){
     session_start();
     $_SESSION["username"] = $userExist["usersUsername"];
     $_SESSION["userid"] = $userExist["usersId"];
+    $_SESSION["fname"] = $userExist["usersFirst"];
+    $_SESSION["lname"] = $userExist["usersLast"];
+    $_SESSION["email"] = $userExist["usersEmail"];
     header("location: ../index.php");
     exit();
   }
@@ -156,4 +159,43 @@ function menuList($text){
   foreach($lines as $line){
     echo "<li>$line</li>";
   }
+
+
+}
+
+function createNunta($conn, $username, $servicii, $decor, $catering, $data){
+  $insert = "INSERT INTO nunta ( nuntaUsers, nuntaServicii, nuntaDecor, nuntaCatering, nuntaData) VALUE (?,?,?,?,?)";
+  $stmt = mysqli_stmt_init($conn);
+  if(!mysqli_stmt_prepare($stmt, $insert)){
+     header("location: ../signup.php?error=stmtfail");
+     exit();
+  }
+  
+  mysqli_stmt_bind_param($stmt, "sssss", $username, $servicii, $decor, $catering, $data);
+  mysqli_stmt_execute($stmt);
+  mysqli_stmt_close($stmt);
+  header("location: ../profile.php");
+  exit();  
+}
+
+// functii profil
+
+function newUserExists($conn, $username, $email, $id){
+  $select = "SELECT * FROM users WHERE (usersUsername = ? OR usersEmail = ?) AND usersId != ?; ";
+  $stmt = mysqli_stmt_init($conn);
+  if(!mysqli_stmt_prepare($stmt, $select)){
+     header("location: ../profile.php?error=stmtfail");
+     exit();
+  }
+  mysqli_stmt_bind_param($stmt, "sss", $username, $email, $id);
+  mysqli_stmt_execute($stmt);
+  $resultSelect = mysqli_stmt_get_result($stmt);
+  if(mysqli_num_rows($resultSelect) > 0){
+      return true;
+  }
+  else{
+      return false;
+  }
+  mysqli_stmt_close($stmt);
+  exit();
 }
