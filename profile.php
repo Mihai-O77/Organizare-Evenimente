@@ -15,7 +15,7 @@ require_once("includes/functions.inc.php");
 
 <div class="details">
 <?php
-if(isset($_POST["cont"])){
+if(isset($_POST["cont"]) || isset($_POST["updatecont"])){
     echo"<div class='datecont'>
            <ul>
             <li>Username: ".$_SESSION['username']."</li>
@@ -27,12 +27,12 @@ if(isset($_POST["cont"])){
          </div>";
 }
 ?>
-</div>
+
 
 <?php
 if(isset($_POST["modifica"]) || isset($_GET["error"])){
 echo "<section id='modifica'>
-      <div class='sign_form_div updatecont'>
+      <div class='login updatecont'>
         <form action='includes/profile.inc.php' method='post'>
 
         <div class='rowform'>
@@ -71,7 +71,69 @@ echo "<section id='modifica'>
         }    
         } 
     } 
+
+if(isset($_POST["comenzi"])){
+  $comenzi = searchComanda($conn, $_SESSION["userid"]);
+  //print_r($comenzi);
+  echo "<div class='datecont comenzi'> <h2>Comenzile mele</h2>";
+        if($comenzi){
+          foreach($comenzi as $com){
+            $comJson = json_encode($com);
+            $dateEv = $com["nuntaData"];
+            $date = strtotime($dateEv);
+            $date = date("Y/m/d", $date);
+            $now = date("Y/m/d");
+            $status = $com["nuntaStatus"];
+
+            if($date < $now){
+              $statusAfisare = "Livrat";
+            }
+            else if($status === "Cerere"){
+              $statusAfisare = "In curs de procesare";
+            }
+            else{
+              $statusAfisare = "Confirmat";
+            }
+            
+            $date = date_create($dateEv);
+            $now = date_create();
+            $zile = date_diff($now, $date);
+            $zile = $zile->format("%r%a");
+            if($zile < 0){
+              $rest = "";
+            }
+            else{
+              $rest = "Mai sunt <span>$zile zile</span> pana la eveniment.";
+            }
+
+            echo "<div class='produs'>
+
+                  <div class='prod'>
+
+                  <div>
+                  Comanda <span>N.2775".$com["nuntaId"]." din <span>$dateEv.</span></span>
+                  </div>
+
+                  <button form='profile' type='submit' name='detalii' value='$comJson'> Detalii comanda</button>
+                  </div>
+
+                  <div class='prod'>
+                  <div>
+                  Status: <span>$status</span>
+                  </div>
+                  <div>
+                  $rest
+                  </div>
+                  </div> 
+                  </div>";
+          }
+        }
+  echo "</div>";
+        
+}
+
 ?>
+</div>
 </div>
 
 

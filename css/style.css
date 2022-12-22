@@ -316,7 +316,7 @@ text-align: center;
     margin-bottom: 30px;
 }
 
-.datecont button{
+.btnCont{
     color: darkcyan;
     padding: 5px;
     font-weight: bold;
@@ -326,4 +326,47 @@ text-align: center;
     width: 100%;
     text-align: center;
     background-color: burlywood;
+}
+
+.updatecont{
+ margin: 0px 10px; 
+}
+
+.comenzi{
+width: 500px;
+}
+
+.produs{
+width: 100%;
+border: 1px solid #999;
+border-radius: 3px;
+margin-bottom: 20px;
+background-color: burlywood;
+}
+
+.prod{
+display: flex;
+align-items: center;
+justify-content: space-between;
+width: 100%;
+padding: 5px;
+font-size: 1rem;
+}
+
+.prod button{
+border: none;
+font-weight: bold;
+color: rgb(44, 101, 187);
+background-color: transparent;
+font-style: italic;
+cursor: pointer;
+}
+
+.prod span{
+    font-weight: bold;
+}
+
+.prod button:hover{
+color: rgb(79, 141, 235);
+text-shadow: 1px 1px 2px rgb(17, 17, 17);
 }

@@ -199,3 +199,48 @@ function newUserExists($conn, $username, $email, $id){
   mysqli_stmt_close($stmt);
   exit();
 }
+
+function updateUser($conn, $username, $email, $fname, $lname, $id){
+  $update = "UPDATE users SET usersUsername=?, usersEmail=?, usersFirst=?, usersLast=? WHERE usersId=?";
+  $stmt = mysqli_stmt_init($conn);
+  if(!mysqli_stmt_prepare($stmt, $update)){
+    header("location: ../profile.php?error=stmtfail");
+    exit();
+  }
+  mysqli_stmt_bind_param($stmt, "sssss", $username, $email, $fname, $lname, $id);
+  mysqli_stmt_execute($stmt);
+  mysqli_stmt_close($stmt);
+  $_SESSION["username"] = $username;
+  $_SESSION["email"] = $email;
+  $_SESSION["fname"] = $fname;
+  $_SESSION["lname"] = $lname;
+  $_SESSION["userid"] =$id;
+  
+  header("location: ../profile.php");
+  exit();
+}
+
+// functii comenzi
+
+function searchComanda($conn, $user){
+$select = "SELECT * FROM nunta WHERE nuntaUsers=?; ";
+$stmt = mysqli_stmt_init($conn);
+if(!mysqli_stmt_prepare($stmt, $select)){
+  header("location: ../profile.php?error=stmtfail");
+  exit();
+}
+mysqli_stmt_bind_param($stmt, "s", $user);
+mysqli_stmt_execute($stmt);
+$result = mysqli_stmt_get_result($stmt);
+if(mysqli_num_rows($result)>0){
+  while($row = mysqli_fetch_assoc($result)){
+    $rows[] = $row;
+  }
+  return $rows;
+}
+else{
+  return false;
+}
+mysqli_stmt_close();
+exit();
+}

@@ -41,4 +41,7 @@ if(newUserExists($conn, $username, $email, $id)){
     exit();
 }
 
+
+updateUser($conn, $username, $email, $fname, $lname, $id);
+
 }
