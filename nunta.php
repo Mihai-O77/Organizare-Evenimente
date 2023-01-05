@@ -1,5 +1,10 @@
 <?php 
 include_once("header.php");
+if(!$_SESSION["username"] || $_SESSION["rol"]!=="user"){
+    header("location: index.php");
+    exit();
+}
+
 require_once("includes/functions.inc.php");
 ?>
 
@@ -20,7 +25,7 @@ Vei primi raspuns la toate intrebarile tale si te vei bucura de o nunta ca-n pov
     </div>
 </div>
 
-<form class="form" action="includes/nunta.inc.php" method="post">
+<form class="form" action="includes/events.inc.php" method="post">
 <div class="options">
 
 <label><input type="date" name="date">Data nuntii</label>
@@ -79,7 +84,7 @@ Vei primi raspuns la toate intrebarile tale si te vei bucura de o nunta ca-n pov
 <li><label><input type="checkbox" name="mancare[]" value="Ice cream bar"> Ice cream bar</label></li>
 <li><label><input type="checkbox" name="mancare[]" value="Cocktail bar"> Cocktail bar</label></li>
 <li><label id="tort"><input type="checkbox" name="mancare[]" value="Tort"> Tort nunta</label></li>
-<li><label class="box"><input type="checkbox" name="mancare[]" value="Meniu"> Meniu
+<li><label class="box"><input type="checkbox" name="menu"> Meniu
         <div class="none">
             <label class="showmenu"><input type="radio" name="meniu" value="Meniu 1" checked> Meniu 1
             <div id="menu1" class="divmenu none"><div class="divflex"><div class="menutitle"><span>* Menu 1 * </span> Pofta buna ! </div><div class="textmenu"><ul><?php menulist("meniuri/menu1.txt");
@@ -102,6 +107,7 @@ Vei primi raspuns la toate intrebarile tale si te vei bucura de o nunta ca-n pov
 </ol>
 
 </div>
+<input type="checkbox" name="event" checked hidden value="nunta">
 <button class="btnConfirm" type="submit" name="confirm"> Confirm</button>
 <div class="nuntaError">
 <?php

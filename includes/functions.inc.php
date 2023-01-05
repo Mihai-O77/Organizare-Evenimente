@@ -127,6 +127,20 @@ function emptyInputLogin($username, $password){
     return $result;
 }
 
+function updateUserVisit($conn,$userid){
+  $sql = "UPDATE users SET usersVisit=? WHERE usersId = ? ";
+  $stmt = mysqli_stmt_init($conn);
+  if(!mysqli_stmt_prepare($stmt, $sql)){
+      header("location: ../profile.php?error=stmtfailed");
+      exit();
+  }
+  
+  mysqli_stmt_bind_param($stmt, "ss",$CURRENT_TIMESTAMP, $userid ); 
+  mysqli_stmt_execute($stmt);
+  mysqli_stmt_close($stmt);
+  exit();
+}
+
 function loginUser($conn, $username, $password){
   $userExist = userExists($conn, $username, $username);
   if($userExist === false){
@@ -140,12 +154,15 @@ function loginUser($conn, $username, $password){
     exit();
   }
   else if($checkPwd === true){
+    $userid = $userExist['usersId'];
+      updateUserVisit($conn,$userid);
     session_start();
     $_SESSION["username"] = $userExist["usersUsername"];
     $_SESSION["userid"] = $userExist["usersId"];
     $_SESSION["fname"] = $userExist["usersFirst"];
     $_SESSION["lname"] = $userExist["usersLast"];
     $_SESSION["email"] = $userExist["usersEmail"];
+    $_SESSION["rol"] = $userExist["usersRol"];
     header("location: ../index.php");
     exit();
   }
@@ -163,15 +180,15 @@ function menuList($text){
 
 }
 
-function createNunta($conn, $username, $servicii, $decor, $catering, $data){
-  $insert = "INSERT INTO nunta ( nuntaUsers, nuntaServicii, nuntaDecor, nuntaCatering, nuntaData) VALUE (?,?,?,?,?)";
+function createEvents($conn, $username, $servicii, $decor, $catering, $data, $event){
+  $insert = "INSERT INTO events ( Users, Servicii, Decor, Catering, eventData, eveniment) VALUE (?,?,?,?,?,?)";
   $stmt = mysqli_stmt_init($conn);
   if(!mysqli_stmt_prepare($stmt, $insert)){
      header("location: ../signup.php?error=stmtfail");
      exit();
   }
   
-  mysqli_stmt_bind_param($stmt, "sssss", $username, $servicii, $decor, $catering, $data);
+  mysqli_stmt_bind_param($stmt, "ssssss", $username, $servicii, $decor, $catering, $data, $event);
   mysqli_stmt_execute($stmt);
   mysqli_stmt_close($stmt);
   header("location: ../profile.php");
@@ -222,8 +239,15 @@ function updateUser($conn, $username, $email, $fname, $lname, $id){
 
 // functii comenzi
 
-function searchComanda($conn, $user){
-$select = "SELECT * FROM nunta WHERE nuntaUsers=?; ";
+function searchComanda($conn, $user, $adevarat, $selectare){
+if($selectare === 1){  
+$select = "SELECT * FROM events WHERE Users=?; ";
+}
+else{
+$select = "SELECT ev.*, us.usersFirst, us.usersLast FROM events ev 
+           JOIN users us ON ev.Users=us.usersId
+           WHERE ev.Users=?; "; 
+}
 $stmt = mysqli_stmt_init($conn);
 if(!mysqli_stmt_prepare($stmt, $select)){
   header("location: ../profile.php?error=stmtfail");
@@ -236,7 +260,12 @@ if(mysqli_num_rows($result)>0){
   while($row = mysqli_fetch_assoc($result)){
     $rows[] = $row;
   }
+  if($adevarat === true){
   return $rows;
+   }
+  else{
+    return mysqli_num_rows($result);
+  }
 }
 else{
   return false;
@@ -244,3 +273,222 @@ else{
 mysqli_stmt_close();
 exit();
 }
+
+
+function serie($event){
+  switch($event){
+    case "nunta": $seria="N.2775"; break;
+    case "botez": $seria="B.069"; break;
+    case "majorat": $seria="M.31057"; break;
+    case "aniversare": $seria="A.116578"; break;
+    default: $seria="0000"; break;
+  }
+  return $seria;
+}
+
+function listaComenzi($com){
+  if($com){
+      $comJson = json_encode($com);
+      // print_r($comJson);
+      $event = $com["eveniment"];
+      $seria = serie($event);
+      $dateEv = $com["eventData"];
+      $date = strtotime($dateEv);
+      $date = date("Y/m/d", $date);
+      $now = date("Y/m/d");
+      $status = $com["StatusEv"];
+      $id = $com["Id"];
+      $seria .= $id;
+      if($date < $now){
+        $statusAfisare = "Livrat";
+      }
+      else if($status === "Cerere"){
+        $statusAfisare = "In curs de procesare";
+      }
+      else{
+        $statusAfisare = "Confirmat";
+      }
+      
+      $date = date_create($dateEv);
+      $now = date_create();
+      $zile = date_diff($now, $date);
+      $zile = $zile->format("%r%a");
+      if($zile < 0){
+        $rest = "";
+      }
+      else{
+        $rest = "Mai sunt <span>$zile zile</span> pana la eveniment.";
+      }
+      $result = [$seria, $dateEv, $comJson, $statusAfisare, $rest];
+      return $result;
+    
+    }else
+    { 
+      echo "<h2>Nu aveti comenzi </h2>";
+    } 
+}
+
+
+function displayComanda($serv, $text){
+$lines = file("$text");
+$listprices = [];
+ foreach($lines as $line){
+  $list = json_decode($line, true);
+  $listprices = array_merge($listprices, $list);
+ }
+$total = 0;
+ if($serv !== "[]"){
+  $servicii = json_decode($serv, true);
+ 
+ foreach($servicii as $serv => $sr){
+  echo "<div class='listaComenzi'>
+         <div id='servicii'>$serv:</div>
+         <div>";
+       $sr = explode(",", $sr);
+       foreach($sr as $s){
+        echo "<div class='listaComenzi'>
+               <div>$s</div>
+               <div style = 'text-align:right'>".$listprices[$s]." Euro</div>
+              </div>";
+        $pret = $listprices[$s];
+        $total += intval($pret);
+       }
+  echo  "</div>
+         </div>
+         <hr>";
+    }
+ } 
+ return $total;
+}
+
+
+//functii manager
+
+function verifComenzi($conn, $status){
+    $sql = "SELECT ev.*, us.usersUsername FROM events ev
+            JOIN users us ON ev.Users=us.usersId WHERE StatusEv = ?;"; 
+     $stmt = mysqli_stmt_init($conn);
+     if(!mysqli_stmt_prepare($stmt, $sql)){
+         header("include: ../../signup.php?error=stmtfailed");
+         exit();
+     }
+     mysqli_stmt_bind_param($stmt, "s", $status);
+     mysqli_stmt_execute($stmt);
+     $result_data = mysqli_stmt_get_result($stmt);
+     if (mysqli_num_rows($result_data) > 0){
+       
+      while($row_data = mysqli_fetch_assoc($result_data)){
+          $rows[] = $row_data;       
+  }
+  return $rows;
+  }
+  
+  else{   
+      return false;
+  }
+  mysqli_stmt_close($stmt);       
+}
+
+function preturiList($text){
+ $lines = file($text);
+ echo "<table>
+      <tr><th>Produs</th><th>Pret</th></tr>";
+  foreach($lines as $line){
+    $list = json_decode($line,true);
+    foreach($list as $produs => $pret){
+      echo "
+      <tr>
+      <td><input style='width:250px;' type='text' name='produse[]' value='$produs' readonly></td>
+      <td><input style='width:100px; text-align:center;' type='number' name='preturi[]' value='$pret'></td>";
+    }
+  }
+  echo "</table>";    
+}
+
+function cererecomanda($serv){
+ if($serv !== "[]"){
+  $servicii = json_decode($serv, true);
+  foreach($servicii as $servi => $sr){
+    echo "<div class='listcom'>
+          <div id='serv'>$servi : </div><div>";
+    $sr = explode(",", $sr);
+    foreach($sr as $s){
+      echo "<div>$s</div>";
+    }
+    echo "</div>
+         </div>
+         <hr>";      
+  } 
+ }
+}
+
+
+function confirmcda($conn, $id, $serie){
+ $sql = "UPDATE events SET StatusEv='Confirmat' WHERE Id=?";
+ $stmt = mysqli_stmt_init($conn);
+ if(!mysqli_stmt_prepare($stmt, $sql)){
+  header("location: ../manager.php?error=stmtfailed");
+  exit();
+ }
+ mysqli_stmt_bind_param($stmt, "s", $id);
+ mysqli_stmt_execute($stmt);
+ mysqli_stmt_close($stmt);
+//  $mesg = "<h3>Comanda nr. $serie a fost confirmata !</h3>
+//   <p>Factura este atasata !</p>";
+//   $to = 'proiect.web.gusti@gmail.com';
+//   $name = "Augustus";
+//   $subj = "Confirmare comanda";
+//   $path = "../../texts/factura.pdf";
+//   $attach = true;
+//   sendMail($mesg,$to,$name,$subj,$path,$attach);       
+       header("location: ../manager.php");
+       exit();
+}
+
+
+//functii admin
+
+function allusers($conn){
+ $sql = "SELECT * FROM users;";
+ $result = mysqli_query($conn, $sql);
+ if(mysqli_num_rows($result) > 0){
+   while($row = mysqli_fetch_assoc($result)){
+    $rows[] = $row;
+   }
+   return $rows;
+ }
+ else{
+  return false;
+ }
+ mysqli_close($conn);
+ header("location: admin.php");
+ exit();
+}
+
+function deletUser($conn, $id){
+  $sql = "DELETE FROM users WHERE usersId =?";
+  $stmt = mysqli_stmt_init($conn);
+  if(!mysqli_stmt_prepare($stmt, $sql)){
+      header("location: admin.php?error=stmtfailed");
+      exit();
+  }
+  mysqli_stmt_bind_param($stmt,"s", $id);
+  mysqli_stmt_execute($stmt);
+  mysqli_stmt_close($stmt);
+  header("location: admin.php");
+  
+}
+function retravansUser($conn, $roll, $id){
+  $sql = "Update users SET usersRol=? WHERE usersId = ? ";
+      $stmt = mysqli_stmt_init($conn);
+      if(!mysqli_stmt_prepare($stmt, $sql)){
+          header("location: admin.php?error=stmtfailed");
+          exit();
+      }
+      
+      mysqli_stmt_bind_param($stmt, "ss",$roll, $id ); 
+      mysqli_stmt_execute($stmt);
+      mysqli_stmt_close($stmt);
+      header("location: admin.php");
+}
+

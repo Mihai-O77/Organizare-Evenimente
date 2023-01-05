@@ -12,29 +12,26 @@ require_once("includes/functions.inc.php");
 <div class="divtop">    
 <div class="descrEv">
     <h2>Descrierea evenimentului</h2>
-    <h3>Botez</h3>
-    <p>Venirea pe lume a unui copil este un motiv de bucurie si trebuie sarbatorita corespunzator.
-         Micutul tau merita un botez ca la carte, iar cea mai buna optiune este sa apelezi la
-          o agentie profesionista de organizare botez. Pret? Acesta va fi stabilit in functie 
-          de mai multi factori, dar daca vei alege agentia noastra, vei beneficia de o oferta
-           avantajoasa. </p>
+    <h3>Aniversare</h3>
+    <p>Atunci cand vrei sa-ti sarbatoresti ziua de nastere, aniversarea casatoriei, majoratul sau vrei sa organizezi o reuniune
+         la care sa participe colegii de liceu, contacteaza-ne si ne vom asigura ca totul va fi la superlativ!
+
+Organizarea unui eveniment privat iti poate da batai de cap, dar daca vei lasa aceasta sarcina in grija profesionistilor, 
+tot ce iti va mai ramane de facut este sa te distrezi pe cinste alaturi de oamenii dragi.</p>
 <p>
-In plus, in acest mod vei scapa de stresul organizarii si te vei putea bucura la maximum de
- petrecerea organizata in cinstea micutului tau!</p>
- <p>
- O firma de organizare botez iti poate pune la dispozitie toate serviciile necesare pentru 
- un eveniment de nota 10! Crestinarea copilului tau se va desfasura in cele mai bune conditii,
-  iar petrecerea va fi de neuitat!</p>
+O petrecere privata reusita are loc intr-un cadru de poveste, in care invitatii se bucura de muzica buna, preparate delicioase,
+bauturi sofisticate si momente distractive. Specialistii nostri in organizare evenimente vor avea grija ca atmosfera sa fie vibranta 
+si ca fiecare detaliu sa corespunda cu asteptarile tale.</p>
 </div>
 <div class="imgtop">
-        <img class="imagheaderdreapta"  src="images/botez.jpeg" alt="botez">
+        <img class="imagheaderdreapta"  src="images/aniversare.jpeg" alt="aniversare">
     </div>
 </div>
 
 <form class="form" action="includes/events.inc.php" method="post">
 <div class="options">
 
-<label><input type="date" name="date">Data botezului</label>
+<label><input type="date" name="date">Data aniversarii</label>
 <ol> Servicii profesioniste:
  <li><label class="box"><input type="checkbox" name="fotograf"> Fotograf
     <div class="none">
@@ -77,9 +74,8 @@ In plus, in acest mod vei scapa de stresul organizarii si te vei putea bucura la
 </ol>
 
 <ol>Decor:
-<li><label><input type="checkbox" name="decor[]" value="Aranjamente florare"> Aranjamente florare</label></li>
-<li><label><input type="checkbox" name="decor[]" value="Aranjamente baloane"> Aranjamente baloane</label></li>
-<li><label><input type="checkbox" name="decor[]" value="Decoratiuni botez"> Decoratiuni botez</label></li>
+<li><label id="flori"><input type="checkbox" name="decor[]" value="Aranjamente florare"> Aranjamente florare</label></li>
+<li><label id="baloane"><input type="checkbox" name="decor[]" value="Aranjamente baloane"> Aranjamente baloane</label></li>
 <li><label ><input type="checkbox" name="decor[]" value="Cabina foto nunta"> Cabina foto</label></li>
 </ol>
 
@@ -111,7 +107,7 @@ In plus, in acest mod vei scapa de stresul organizarii si te vei putea bucura la
 </ol>
 
 </div>
-<input type="checkbox" name="event" checked hidden value="botez">
+<input type="checkbox" name="event" checked hidden value="aniversare">
 <button class="btnConfirm" type="submit" name="confirm"> Confirm</button>
 <div class="nuntaError">
 <?php
@@ -119,7 +115,7 @@ if(isset($_GET["error"])){
 switch($_GET["error"]){
     case "emptyoptions": echo "Nu ati ales nicio optiune";break;
     case "emptydate": echo "Nu a fost selectata o data";break;
-    case "invaliddate": echo "Data botezului trebuie sa fie peste cel putin 1 saptamana de la data actuala";break; 
+    case "invaliddate": echo "Data aniversarii trebuie sa fie peste cel putin 1 saptamana de la data actuala";break; 
 }    
 }
 ?>

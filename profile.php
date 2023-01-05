@@ -1,5 +1,10 @@
 <?php
 include_once("header.php");
+if(!$_SESSION["username"] || $_SESSION["rol"]!=="user"){
+  header("location: index.php");
+  exit();
+}
+
 require_once("includes/connection.db.php");
 require_once("includes/functions.inc.php");
 ?>
@@ -15,52 +20,57 @@ require_once("includes/functions.inc.php");
 
 <div class="details">
 <?php
-if(isset($_POST["cont"]) || isset($_POST["updatecont"])){
-    echo"<div class='datecont'>
+  $username = $_SESSION['username'];
+  $fname = $_SESSION['fname'];
+  $lname = $_SESSION['lname'];
+  $email = $_SESSION['email'];
+if(isset($_POST["cont"]) || isset($_POST["updatecont"])){ 
+  ?>
+    <div class='datecont'>
            <ul>
-            <li>Username: ".$_SESSION['username']."</li>
-            <li>First Name: ".$_SESSION['fname']."</li>
-            <li>Last Name: ".$_SESSION['lname']."</li>
-            <li>Email: ".$_SESSION['email']."</li>
+            <li>Username: <?php echo "$username";?></li>
+            <li>First Name:<?php echo "$fname";?></li>
+            <li>Last Name:<?php echo "$lname";?></li>
+            <li>Email:<?php echo "$email";?></li>
            </ul>
-           <button form='profil' type='submit' name='modifica'>Administreaza datele tale</button>
-         </div>";
-}
-?>
+           <button form='profil' type='submit' name='modifica' class='btnCont'>Administreaza datele tale</button>
+         </div>
+<?php }
 
 
-<?php
-if(isset($_POST["modifica"]) || isset($_GET["error"])){
-echo "<section id='modifica'>
+
+
+if(isset($_POST["modifica"]) || isset($_GET["error"])){?>
+      <section id='modifica'>
       <div class='login updatecont'>
-        <form action='includes/profile.inc.php' method='post'>
+        <form  action='includes/profile.inc.php' method='post'>
 
         <div class='rowform'>
         <label for='user'>Username</label>
-        <input id='user' type='text' name='username' placeholder='Username' value=".$_SESSION['username'].">
+        <input id='user' type='text' name='username' placeholder='Username' value=<?php echo "$username";?>>
         </div><br><br>
         
         <div class='rowform'>
         <label for='fname'>First Name</label>
-        <input id='fname' type='text' name='firstname' placeholder='First Name' value=".$_SESSION['fname'].">
+        <input id='fname' type='text' name='firstname' placeholder='First Name' value=<?php echo "$fname";?>>
         </div><br><br>
 
         <div class='rowform'>
         <label for='lname'>Last Name</label>
-        <input id='lname' type='text' name='lastname' placeholder='Last Name' value=".$_SESSION['lname'].">
+        <input id='lname' type='text' name='lastname' placeholder='Last Name' value=<?php echo "$lname";?>>
         </div><br><br>
 
         <div class='rowform'>
         <label for='email'>Email</label>
-        <input id='email' type='text' name='email' placeholder='Email' value=".$_SESSION['email'].">
+        <input id='email' type='text' name='email' placeholder='Email' value=<?php echo "$email";?>>
         </div><br><br>
 
         <button type='submit' name='updatecont'>Salveaza</button>
 
         </form>
       </div>
-      </section>";
-      if(isset($_GET["error"])){
+      </section>
+      <?php if(isset($_GET["error"])){
         switch($_GET["error"]){
             case "emptyinput": echo "Nu ati completat un camp"; break;
             case "invalidusername": echo "Username este invalid"; break;
@@ -73,82 +83,50 @@ echo "<section id='modifica'>
     } 
 
 if(isset($_POST["comenzi"])){
-  $comenzi = searchComanda($conn, $_SESSION["userid"]);
-  //print_r($comenzi);
-  echo "<div class='datecont comenzi'> <h2>Comenzile mele</h2>";
-        if($comenzi){
-          foreach($comenzi as $com){
-            $comJson = json_encode($com);
-            $dateEv = $com["nuntaData"];
-            $date = strtotime($dateEv);
-            $date = date("Y/m/d", $date);
-            $now = date("Y/m/d");
-            $status = $com["nuntaStatus"];
-
-            if($date < $now){
-              $statusAfisare = "Livrat";
-            }
-            else if($status === "Cerere"){
-              $statusAfisare = "In curs de procesare";
-            }
-            else{
-              $statusAfisare = "Confirmat";
-            }
-            
-            $date = date_create($dateEv);
-            $now = date_create();
-            $zile = date_diff($now, $date);
-            $zile = $zile->format("%r%a");
-            if($zile < 0){
-              $rest = "";
-            }
-            else{
-              $rest = "Mai sunt <span>$zile zile</span> pana la eveniment.";
-            }
-
-            echo "<div class='produs'>
-
-                  <div class='prod'>
-
-                  <div>
-                  Comanda <span>N.2775".$com["nuntaId"]." din <span>$dateEv.</span></span>
-                  </div>
-
-                  <button form='profile' type='submit' name='detalii' value='$comJson'> Detalii comanda</button>
-                  </div>
-
-                  <div class='prod'>
-                  <div>
-                  Status: <span>$status</span>
-                  </div>
-                  <div>
-                  $rest
-                  </div>
-                  </div> 
-                  </div>";
-          }
-        }
-  echo "</div>";
+  $comenzi = searchComanda($conn, $_SESSION["userid"], true, 1);?>
+  <div class='datecont comenzi'> <h2>Comenzile mele</h2>
+  <?php foreach($comenzi as $com){
+  $raspuns = listaComenzi($com);
+  // $result = [$seria, $dateEv, $comJson, $status, $rest];
+  ?>
         
-}
-
+                  <div class='produs'>
+                  <div class='prod'>
+                  <div>Comanda <span><?php echo "$raspuns[0]";?><span> din <?php echo "$raspuns[1]";?>.</span></span> </div>
+                  <button form='profil' type='submit' name='detalii' value='<?php echo "$raspuns[2]";?>'> Detalii comanda</button></div>
+                  <div class='prod'>
+                  <div>Status: <span><?php echo "$raspuns[3]"?></span></div>
+                  <div><?php echo "$raspuns[4]";?></div>
+                  </div> 
+                  </div>
+  <?php } ?>
+  </div>
+        
+<?php } 
+if(isset($_POST['detalii'])){
+  $comz = $_POST['detalii'];
+  $valobiect = json_decode($comz, true);
+  $id = $valobiect["Id"];
+  $eveniment = $valobiect["eveniment"];
+  $dataeveniment = $valobiect["eventData"];
+  $seria = serie($eveniment);
+  $seria .= $id;
 ?>
+
+<div class="datecont comenzi"> <h3>Comanda numarul <?php echo"$seria";?> din <?php echo"$dataeveniment"; ?></h3> <br><br>
+ <?php 
+ $tot = displayComanda($valobiect["Servicii"], "meniuri/preturi.txt") +
+        displayComanda($valobiect["Decor"], "meniuri/preturi.txt") +
+        displayComanda($valobiect["Catering"], "meniuri/preturi.txt");
+ ?>
+ <div><span>Total: <?php echo"$tot" ?> Euro</span></div>
+</div>
+
 </div>
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+<?php
+}
+?>
 
 
 <?php

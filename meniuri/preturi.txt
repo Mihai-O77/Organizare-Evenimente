@@ -1,0 +1,31 @@
+{"Pachet mini": 315}
+{"Pachet mediu": 470}
+{"Pachet all remembers": 650}
+{"Pachet standard": 630}
+{"Pachet profi": 980}
+{"Muzica pentru nunta traditionala": 1350}
+{"Muzica pentru nunta moderna": 1350}
+{"All gen": 2000}
+{"Muzica de petrecere": 400}
+{"Muzica pop dance": 400}
+{"Rock": 400}
+{"Muzica etno": 400}
+{"Muzica populara": 400}
+{"Muzica instrumentala": 400}
+{"Artificii": 350}
+{"Animatori": 650}
+{"Aranjamente florare": 530}
+{"Buchete nunta": 350}
+{"Buchete cununie": 250}
+{"Aranjamente baloane": 500}
+{"Cabina foto nunta": 450}
+{"Candy bar": 780}
+{"Ice cream bar": 750}
+{"Cocktail bar": 940}
+{"Tort": 600}
+{"Meniu 1": 2350}
+{"Meniu 2": 2350}
+{"Meniu 3": 2350}
+{"Meniu 4": 2350}
+{"Decor biserica": 250}
+{"Decoratiuni botez": 380}

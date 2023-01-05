@@ -82,6 +82,11 @@ if(isset($_POST["mancare"])){
     $array_catering = array_merge($array_catering, $array_mancare);
 }
 
+if(isset($_POST["menu"])){
+    $menu = array("Meniu"=>$_POST["meniu"]);
+    $array_catering = array_merge($array_catering, $menu);
+}
+
 if(empty($array_servici) && empty($array_decor) && empty($array_catering)){
     header("location: ../nunta.php?error=emptyoptions");
     exit(); 
@@ -108,13 +113,14 @@ if(isset($_POST["date"])){
    }
 }
 
-  
-
+if(isset($_POST["event"])){  
+$event = $_POST["event"];
 $userNunta = $_SESSION["userid"];
 $servicii = json_encode($array_servici);
 $decor = json_encode($array_decor);
 $catering = json_encode($array_catering);
 
-createNunta($conn, $userNunta, $servicii, $decor, $catering, $ndate);
+createEvents($conn, $userNunta, $servicii, $decor, $catering, $ndate, $event);
+}
 }
 

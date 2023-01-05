@@ -15,7 +15,7 @@ html{
     position: sticky;
     top: 0;
     background-color: rgb(247, 246, 237);
-    height: 100px;
+    padding: 25px;
     z-index: 200;
 }
 
@@ -100,17 +100,6 @@ html{
     font-size: 1.5rem;
 }
 
-.form{
-    margin: 20px auto;
-    background-color:rgba(247, 246, 237, 0.8) ;
-    font-size: 1.3rem;
-    border-radius: 15px;
-    width: 80%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
 .btnConfirm{
     font-size: 1.2rem;
     padding: 10px;
@@ -129,7 +118,6 @@ html{
     width: 80%;
     border-radius: 15px;
     padding: 10px;
-    position: relative;
 }
 
 .options li:hover{
@@ -216,13 +204,24 @@ font-size: 1.2rem;
 display: block;
 }
 
+.form{
+    margin: 20px auto;
+    background-color:rgba(247, 246, 237, 0.8) ;
+    font-size: 1.3rem;
+    border-radius: 15px;
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+
 .divmenu{
 position: absolute;
 font-size: 1.3rem;
 padding: 15px;
 color: rgb(77, 77, 77);
-
-bottom: -630px;
+top:100%;
 left: 0px;
 width: 100%;
 min-height: 500px;
@@ -333,7 +332,7 @@ text-align: center;
 }
 
 .comenzi{
-width: 500px;
+width: 650px;
 }
 
 .produs{
@@ -369,4 +368,100 @@ cursor: pointer;
 .prod button:hover{
 color: rgb(79, 141, 235);
 text-shadow: 1px 1px 2px rgb(17, 17, 17);
+}
+
+.listaComenzi{
+display: flex;
+width: 100%;
+align-items: center;
+justify-content: center;
+}
+
+.listaComenzi div{
+width: 100%;
+padding: 5px;
+}
+
+#servicii{
+width: 60%;
+}
+
+.menuManager{
+    align-items: center;
+    padding: 25px;
+}
+
+.menuManager ul{
+list-style-type: none;
+display: flex;
+
+}
+
+.menuManager ul li button{
+ font-size: 1.3rem;
+ padding: 10px;
+ margin: 5px;
+ width: 200px;
+ border-radius: 5px;
+ background-color: burlywood;
+ cursor: pointer; 
+ border: none;
+ box-shadow: 0px 0px 1px 1px grey;   
+}
+
+.menuManager ul li button:hover{
+ box-shadow: 0px 0px 1px 2px black;
+}
+
+.menuManager ul li button span{
+ color: yellow;
+font-weight: bold;   
+}
+
+.preturi{
+    padding: 20px;
+}
+
+table, th, td{
+    border: 1px solid black;
+    background-color: blanchedalmond;
+    font-weight: bold;
+    padding: 5px;
+}
+
+td input{
+    border: none;
+    background-color: transparent;
+    padding: 3px;
+    font-weight: bold;
+}
+
+.btnsave{
+    border: none;
+    border-radius: 2px;
+    background-color: darkcyan;
+    cursor: pointer;
+    padding: 7px;
+    width: 150px;
+    margin: 7px auto;
+}
+
+.managercomenzi{
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 5px;
+    width: 500px;
+    background-color: burlywood;
+}
+
+.listcom{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.listcom div{
+    width: 100%;
+    padding: 5px;
 }

@@ -23,17 +23,23 @@ session_start();
         <li> <a href="index.php">Home</a> </li>
         <?php
         if(isset($_SESSION["username"])){
+           if($_SESSION["rol"]==="user"){ 
            echo "<li> <a href='profile.php'>Profile</a> </li>";
            echo "<li class='hoverul'>Evenimente
             <div class='evenimente'>
                <a href='nunta.php'>Nunta</a>
                <a href='botez.php'>Botez</a>
-               <a href='petrCopii.php'>Petrecere copii</a>
-               <a href='conferinta.php'>Conferinta</a>
+               <a href='majorat.php'>Majorat</a>
                <a href='aniversare.php'>Aniversare</a> 
             </div>
             
-        </li>";
+                </li>";}
+        if($_SESSION["rol"]==="manager"){
+         echo "<li> <a href='manager.php'>Manager</a> </li>";   
+        }
+        if($_SESSION["rol"]==="admin"){
+            echo "<li> <a href='admin.php'>Admin</a> </li>";   
+        }         
        echo "<li> <a href='includes/logout.inc.php'>Log out</a> </li>";
         }
         else{
