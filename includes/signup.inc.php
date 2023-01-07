@@ -1,7 +1,13 @@
 <?php
-
+$secretkey = "6Ldh2twjAAAAAKE7TccF_TEvc6A-Z-CwUsRThlfn";
 
 if(isset($_POST["submit"])){
+  if(isset($_POST["g-recaptcha-response"]) && !empty($_POST["g-recaptcha-response"])){
+    $url = "https://www.google.com/recaptcha/api/siteverify?secret=".$secretkey."&response=".$_POST["g-recaptcha-response"];
+    $response = file_get_contents($url);
+    $responseData= json_decode($response);
+    if($responseData->success){
+
    $username=$_POST["username"];
    $email=$_POST["email"];
    $password=$_POST["pwd"];
@@ -54,6 +60,11 @@ if(isset($_POST["submit"])){
    
 
    insertUser($conn, $username, $email, $password, $firstName, $lastName);
+}}
+  else{
+    header("location: ../signup.php?error=recaptcha");
+    exit();
+     }
 }
 else{
     header("location: ../signup.php");

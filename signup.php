@@ -11,6 +11,7 @@ include_once("header.php");
     Password Repeat<br><input type="password" name="pwdr"><br><br>
     First Name<br><input type="text" name="fname"><br><br>
     Last Name<br><input type="text" name="lname"><br><br>
+    <div class="g-recaptcha" data-sitekey="6Ldh2twjAAAAAMs1L40KgiJtld0jzXWOHYy_fCuV"></div> 
     <button name="submit" type="submit">Sign up</button>
    </form> 
  </div>
@@ -26,6 +27,7 @@ include_once("header.php");
     case "invalidLname": echo "Numele de familie este invalid"; break;
     case "emptyinput": echo "Nu ai completat tot formularul"; break;
     case "useralreadyexists": echo "Utilizatorul exista deja"; break;
+    case "recaptcha": echo "Nu ai verificat recaptcha"; break;
   }  
  }
  ?>

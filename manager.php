@@ -58,13 +58,15 @@ if($comz){
           cererecomanda($com['Catering']); 
           ?>
           
-      <div>
+      
          <form  action='includes/manager.inc.php' method='post'> 
          <input type='hidden' name='id' value='<?php echo "$idcda"; ?>'>
          <input type='hidden' name='event' value='<?php echo "$eveniment"; ?>'>
+         <div>
             <button class='btnsave' type='submit' name='confirmare'>Confirmare</button>
-         </form>
+            <button class='btnsave' type='submit' name='anulare'>Anulare</button>
          </div>
+         </form>
          </div>
           <br><br>
 

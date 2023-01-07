@@ -22,6 +22,13 @@ if(isset($_POST['confirmare'])){
 $event = $_POST['event'];
 $idcda = $_POST['id'];
 $serie = serie($event);
-$serie .= $idcda; 
+$serie .= $idcda;
+include_once("pdfgenerator.inc.php"); 
     confirmcda($conn, $idcda, $serie);
+}
+
+if(isset($_POST["anulare"])){
+  $idcda = $_POST['id'];
+  anularecda($conn, $idcda);
+  header("location: ../manager.php");  
 }

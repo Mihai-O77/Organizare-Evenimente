@@ -83,16 +83,16 @@ if(isset($_POST["modifica"]) || isset($_GET["error"])){?>
     } 
 
 if(isset($_POST["comenzi"])){
-  $comenzi = searchComanda($conn, $_SESSION["userid"], true, 1);?>
+  $comenzi = searchComanda($conn, $_SESSION["userid"], true, 0);?>
   <div class='datecont comenzi'> <h2>Comenzile mele</h2>
   <?php foreach($comenzi as $com){
   $raspuns = listaComenzi($com);
-  // $result = [$seria, $dateEv, $comJson, $status, $rest];
+  // $result = [$seria, $dateEv, $comJson, $status, $rest, $cdadata];
   ?>
         
                   <div class='produs'>
                   <div class='prod'>
-                  <div>Comanda <span><?php echo "$raspuns[0]";?><span> din <?php echo "$raspuns[1]";?>.</span></span> </div>
+                  <div>Comanda <span><?php echo "$raspuns[0]";?><span> din <?php echo "$raspuns[5]";?>.</span></span> </div>
                   <button form='profil' type='submit' name='detalii' value='<?php echo "$raspuns[2]";?>'> Detalii comanda</button></div>
                   <div class='prod'>
                   <div>Status: <span><?php echo "$raspuns[3]"?></span></div>
@@ -109,11 +109,14 @@ if(isset($_POST['detalii'])){
   $id = $valobiect["Id"];
   $eveniment = $valobiect["eveniment"];
   $dataeveniment = $valobiect["eventData"];
+  $datacomanda = $valobiect["comandaData"];
   $seria = serie($eveniment);
   $seria .= $id;
 ?>
 
-<div class="datecont comenzi"> <h3>Comanda numarul <?php echo"$seria";?> din <?php echo"$dataeveniment"; ?></h3> <br><br>
+<div class="datecont comenzi"> <h3>Comanda numarul <?php echo"$seria";?> din <?php echo"$datacomanda"; ?></h3> <br>
+                               <h3>Evenimentul va avea loc la data <?php echo"$dataeveniment"; ?></h3>
+                                <br><br>
  <?php 
  $tot = displayComanda($valobiect["Servicii"], "meniuri/preturi.txt") +
         displayComanda($valobiect["Decor"], "meniuri/preturi.txt") +

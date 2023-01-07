@@ -128,17 +128,22 @@ function emptyInputLogin($username, $password){
 }
 
 function updateUserVisit($conn,$userid){
-  $sql = "UPDATE users SET usersVisit=? WHERE usersId = ? ";
+  $sql = "UPDATE users SET usersVisit=?, usersAccesari=? WHERE usersId = ? ";
+  $query = "SELECT usersAccesari FROM users WHERE usersId = $userid;";
+  $result = mysqli_query($conn, $query);
+  if($row=mysqli_fetch_row($result)){
+    $accesari = $row[0];
+    $accesari++;
+  }
   $stmt = mysqli_stmt_init($conn);
   if(!mysqli_stmt_prepare($stmt, $sql)){
       header("location: ../profile.php?error=stmtfailed");
       exit();
   }
   
-  mysqli_stmt_bind_param($stmt, "ss",$CURRENT_TIMESTAMP, $userid ); 
+  mysqli_stmt_bind_param($stmt, "sss",$CURRENT_TIMESTAMP, $accesari, $userid ); 
   mysqli_stmt_execute($stmt);
   mysqli_stmt_close($stmt);
-  exit();
 }
 
 function loginUser($conn, $username, $password){
@@ -191,6 +196,21 @@ function createEvents($conn, $username, $servicii, $decor, $catering, $data, $ev
   mysqli_stmt_bind_param($stmt, "ssssss", $username, $servicii, $decor, $catering, $data, $event);
   mysqli_stmt_execute($stmt);
   mysqli_stmt_close($stmt);
+  $cda = searchComanda($conn,$username,true,0);
+  $email = $cda[0]['usersEmail'];
+  $lname = $cda[0]['usersLast'];
+  $fname = $cda[0]['usersFirst'];
+  $mesg ="<div><img src=\"../images/maillogo.jpeg\" alt='Happy events'></div>
+        <hr>
+        <h3>".$fname.' '.$lname.", cererea dv. a fost inregistrata !</h3>
+        <h4>Multumim pentru alegerea facuta !</h4>
+        <p>Veti primi un email de confirmare !</p>";
+        $to = $email;
+        $name = $fname." ".$lname;
+        $subj = "Confirmare comanda";
+        $attach = false;
+        $path = "";
+        sendMail($mesg,$to,$name,$subj,$path,$attach);
   header("location: ../profile.php");
   exit();  
 }
@@ -241,12 +261,14 @@ function updateUser($conn, $username, $email, $fname, $lname, $id){
 
 function searchComanda($conn, $user, $adevarat, $selectare){
 if($selectare === 1){  
-$select = "SELECT * FROM events WHERE Users=?; ";
+  $select = "SELECT ev.*, us.usersFirst, us.usersLast, us.usersEmail FROM events ev 
+             JOIN users us ON ev.Users=us.usersId
+             WHERE ev.Id=?; ";
 }
 else{
-$select = "SELECT ev.*, us.usersFirst, us.usersLast FROM events ev 
-           JOIN users us ON ev.Users=us.usersId
-           WHERE ev.Users=?; "; 
+  $select = "SELECT ev.*, us.usersFirst, us.usersLast, us.usersEmail FROM events ev 
+             JOIN users us ON ev.Users=us.usersId
+             WHERE ev.Users=?; "; 
 }
 $stmt = mysqli_stmt_init($conn);
 if(!mysqli_stmt_prepare($stmt, $select)){
@@ -292,6 +314,7 @@ function listaComenzi($com){
       // print_r($comJson);
       $event = $com["eveniment"];
       $seria = serie($event);
+      $cdadata = $com["comandaData"];
       $dateEv = $com["eventData"];
       $date = strtotime($dateEv);
       $date = date("Y/m/d", $date);
@@ -319,7 +342,7 @@ function listaComenzi($com){
       else{
         $rest = "Mai sunt <span>$zile zile</span> pana la eveniment.";
       }
-      $result = [$seria, $dateEv, $comJson, $statusAfisare, $rest];
+      $result = [$seria, $dateEv, $comJson, $statusAfisare, $rest, $cdadata];
       return $result;
     
     }else
@@ -329,13 +352,19 @@ function listaComenzi($com){
 }
 
 
+function listprices($text){
+  $lines = file("$text");
+      $listprices=[];
+         foreach($lines as $line){
+          $list = json_decode($line,true);
+          $listprices = array_merge($listprices,$list) ;
+         }
+         return $listprices;
+}
+
 function displayComanda($serv, $text){
 $lines = file("$text");
-$listprices = [];
- foreach($lines as $line){
-  $list = json_decode($line, true);
-  $listprices = array_merge($listprices, $list);
- }
+$listprices = listprices[$text];
 $total = 0;
  if($serv !== "[]"){
   $servicii = json_decode($serv, true);
@@ -433,16 +462,49 @@ function confirmcda($conn, $id, $serie){
  mysqli_stmt_bind_param($stmt, "s", $id);
  mysqli_stmt_execute($stmt);
  mysqli_stmt_close($stmt);
-//  $mesg = "<h3>Comanda nr. $serie a fost confirmata !</h3>
-//   <p>Factura este atasata !</p>";
-//   $to = 'proiect.web.gusti@gmail.com';
-//   $name = "Augustus";
-//   $subj = "Confirmare comanda";
-//   $path = "../../texts/factura.pdf";
-//   $attach = true;
-//   sendMail($mesg,$to,$name,$subj,$path,$attach);       
+ $cda = searchComanda($conn,$id,true,1);
+ $email = $cda[0]['usersEmail'];
+ $lname = $cda[0]['usersLast'];
+ $fname = $cda[0]['usersFirst'];
+$mesg = "<h3>Comanda nr. $serie a fost confirmata !</h3>
+<p>Factura este atasata !</p>";
+$to = $email;
+$name = $fname;
+$subj = "Confirmare comanda";
+$path = "../meniuri/factura.pdf";
+$attach = true;
+sendMail($mesg,$to,$name,$subj,$path,$attach);      
        header("location: ../manager.php");
        exit();
+}
+
+function anularecda($conn, $id){
+  $cda = searchComanda($conn,$id,true,1);
+  $email = $cda[0]['usersEmail'];
+  $lname = $cda[0]['usersLast'];
+  $fname = $cda[0]['usersFirst'];
+  $mesg ="<div><img src='../images/maillogo.jpeg' alt='Happy events'></div>
+        <hr>
+        <h3>".$fname.' '.$lname.", cererea dv. a fost anulata !</h3>
+        <h4>Incercati sa faceti comanda din nou.</h4>
+        <p>Veti primi un email de confirmare !</p>";
+        $to = $email;
+        $name = $fname." ".$lname;
+        $subj = "Anulare comanda";
+        $attach = false;
+        $path = "";
+        sendMail($mesg,$to,$name,$subj,$path,$attach);
+$sql = "DELETE FROM events WHERE Id=?";
+$stmt = mysqli_stmt_init($conn);
+  if(!mysqli_stmt_prepare($stmt, $sql)){
+      header("location: ../manager.php?error=stmtfailed");
+      exit();
+  }
+  mysqli_stmt_bind_param($stmt,"s", $id);
+  mysqli_stmt_execute($stmt);
+  mysqli_stmt_close($stmt);
+  header("location: ../manager.php");
+  exit();
 }
 
 
@@ -476,7 +538,7 @@ function deletUser($conn, $id){
   mysqli_stmt_execute($stmt);
   mysqli_stmt_close($stmt);
   header("location: admin.php");
-  
+  exit();
 }
 function retravansUser($conn, $roll, $id){
   $sql = "Update users SET usersRol=? WHERE usersId = ? ";
@@ -492,3 +554,144 @@ function retravansUser($conn, $roll, $id){
       header("location: admin.php");
 }
 
+//functii mail
+
+function sendMail($mesg,$_to,$name,$subj,$pathattach,$attachament){
+  $send = "yes";
+  $mesaj = $mesg;
+  $email = $_to;
+  $usernameul = $name;
+  $subiect = $subj;
+  $path = $pathattach;
+  $attach = $attachament;
+  include_once ("phpmailer/mail_cod.php");
+}
+
+//functii pdf
+
+function createPdf($conn,$id,$pdf,$lat,$text){
+        
+  $furnizor='Happy Events S.R.L.';
+  $reg_com_f='J12/3456/7890';
+  $cif_f='RO12345678';
+  $adresa_f='Oltenita, Jud. Calarasi';
+  $iban_f='RO12345678910111213141516';
+  $banc_f='BCR Oltenita';
+  $capital='10000 RON';
+
+  $y_save_1=$pdf->GetY();
+  $pdf->SetDrawColor(80,150,255);
+  $pdf->Cell($lat/6,4,'Furnizor: ','L',0,'L',0);
+  $pdf->Cell($lat/6,4,$furnizor,0,1,'L',0);
+  $pdf->Cell($lat/6,4,'Reg. com.: ','L',0,'L',0);
+  $pdf->Cell($lat/6,4,$reg_com_f,0,1,'L',0);
+  $pdf->Cell($lat/6,4,'CIF: ','L',0,'L',0);
+  $pdf->Cell($lat/6,4,$cif_f,0,1,'L',0);
+  $pdf->Cell($lat/6,4,'Adresa: ','L',0,'L');
+  $pdf->MultiCell($lat/6+10,4,$adresa_f,0,'L');
+  $pdf->Cell($lat/6,4,'IBAN: ','L',0,'L',0);
+  $pdf->Cell($lat/6,4,$iban_f,0,1,'L',0);
+  $pdf->Cell($lat/6,4,'Banca: ','L',0,'L',0);
+  $pdf->Cell($lat/6,4,$banc_f,0,1,'L',0);
+  $pdf->Cell($lat/6,4,'Capital social: ','L',0,'L',0);
+  $pdf->Cell($lat/6,4,$capital,0,1,'L',0);
+  
+  $pdf->Ln(10);
+  $y_save=$pdf->GetY();
+
+  $listprices = listprices($text);
+  $cda = searchComanda($conn,$id,true,1);
+  $serv = [$cda[0]['Servicii'],$cda[0]['Decor'],$cda[0]['Catering']];
+
+  $name = $cda[0]['usersLast']." ".$cda[0]['usersFirst'];
+  $pdf->SetXY(10+2*$lat/3,$y_save_1);
+  $pdf->Cell($lat/6,4,'Client: ','L',0,'L',0);
+  $pdf->Cell($lat/6,4,$name,0,1,'L',0);
+  $pdf->SetXY(10+2*$lat/3,$y_save_1+4);
+  $pdf->Cell($lat/6,4,'Reg. com.: ','L',0,'L',0);
+  $pdf->Cell($lat/6,4,'',0,1,'L',0);
+  $pdf->SetXY(10+2*$lat/3,$y_save_1+8);
+  $pdf->Cell($lat/6,4,'CIF: ','L',0,'L',0);
+  $pdf->Cell($lat/6,4,'',0,1,'L',0);
+  $pdf->SetXY(10+2*$lat/3,$y_save_1+12);
+  $pdf->Cell($lat/6,4,'Adresa: ','L',0,'L');
+  $pdf->MultiCell($lat/6+10,4,'',0,'L');
+  $pdf->SetXY(10+2*$lat/3,$y_save_1+16);
+  $pdf->Cell($lat/6,4,'IBAN: ','L',0,'L',0);
+  $pdf->Cell($lat/6,4,'',0,1,'L',0);
+  $pdf->SetXY(10+2*$lat/3,$y_save_1+20);
+  $pdf->Cell($lat/6,4,'Banca: ','L',0,'L',0);
+  $pdf->Cell($lat/6,4,'',0,1,'L',0);
+  $pdf->SetXY(10+2*$lat/3,$y_save_1+24);
+  $pdf->Cell($lat/6,4,'Capital social: ','L',0,'L',0);
+  $pdf->Cell($lat/6,4,'',0,1,'L',0);
+
+  $pdf->SetXY(10,$y_save);
+  $pdf->SetDrawColor(120);
+  $pdf->SetFont('Arial','B',10);
+      $pdf->Cell(11,6,'Nr.crt','LT',1,'L',0);
+      $pdf->SetXY(21,$y_save);
+      $pdf->Cell($lat/4,6,'Denumire serviciu',1,1,'L',0);
+      $pdf->SetXY(21+$lat/4,$y_save);
+      $pdf->Cell($lat/3,6,'Denumire produs',1,1,'L',0);
+      $pdf->SetXY(21+$lat/4+$lat/3,$y_save);
+      $pdf->Cell($lat/6,6,'Pret(fara TVA)',1,1,'C',0);
+      $pdf->SetXY(21+$lat/4+$lat/3+$lat/6,$y_save);
+      $pdf->Cell($lat/6,6,'Valoare TVA',1,1,'C',0);
+
+      $pdf->SetFont('Arial','',10);
+      $nrcrt = 0;
+      $prettotal = 0;
+  foreach($serv as $serviciu => $sr){
+      $ser = json_decode($sr,true);
+      foreach($ser as $srv => $sr){
+          $nrcrt ++;
+          $y_save=$pdf->GetY();
+          $pdf->Cell(11,6,$nrcrt,'LTR',1,'L',0);
+          $pdf->SetXY(21,$y_save);
+          $pdf->Cell($lat/4,6,$srv." :",'T',1,'L',0);
+      // $pdf->SetXY(20+$lat/4,$y_save);
+          $sr = explode(",",$sr);
+          $y_save_c=$y_save;
+          $cell = 0;
+      foreach ($sr as $cat){
+          $pret = $listprices[$cat];
+          $prettotal += intval($pret);
+          $pftva = intval($pret) * 100/119;
+          $pftva = number_format($pftva, 2, '.', '');
+          $pctva = intval($pret) - floatval($pftva);
+          $pctva = number_format($pctva, 2, '.', '');
+          $cell++;
+          $pdf->SetXY(21+$lat/4,$y_save_c);
+          $pdf->Cell($lat/3,6,$cat,'RT',1,'L',0); 
+          $pdf->SetXY(21+$lat/4+$lat/3,$y_save_c);
+          $pdf->Cell($lat/6,6,$pftva." Euro",1,1,'R',0);
+          $pdf->SetXY(21+$lat/4+$lat/3+$lat/6,$y_save_c);
+          $pdf->Cell($lat/6,6,$pctva." Euro",1,1,'R',0);
+          $y_save_c=$pdf->GetY();
+         if(count($sr) > 1 && $cell < count($sr) ){
+          $pdf->Cell(11,6,"",'LR',1,'L',0);
+         }
+          
+      }
+      
+      }
+      
+  }
+  $pdf -> SetFont('Arial', 'B', 15);
+  $pdf->Cell(41+$lat/2,8,'Total plata ','LTB',1,'R',0);
+  $pdf->SetXY(51+$lat/2,$y_save_c);
+  $pdf->SetTextColor(80,150,255);
+  $pdf->Cell($lat/12+$lat/3-30,8,$prettotal.' Euro','RTB',1,'R',0);
+}
+
+function nrFactura(){
+  $nr = "";
+  for($i=0;$i<4;$i++){
+      $rand = rand(65,90);
+      $nr .= chr($rand);
+  }
+  $rnd = rand(10000000,99999999);
+  $nr .= $rnd;
+  return $nr;
+}

@@ -1,6 +1,6 @@
 <?php 
-include_once"header.php";
-if(!isset($_SESSION['usersUsername']) || $_SESSION['rol'] !=="admin"){
+include_once("header.php");
+if(!isset($_SESSION["username"]) || $_SESSION["rol"]!=="admin"){
     header("location: index.php");
 }
 require_once("includes/functions.inc.php");
@@ -14,14 +14,14 @@ $comenzi = searchComanda($conn, $_SESSION["userid"], true, 0);
 <section>
     <form id="usdet" action="admin.php" method="post">
     <div class='divflex'>
-        <div><button class='btn red'  type='submit' name='del'>Delete</button></div>
-        <div><button class='btn'  type='submit' name='user'>Lista User</button></div>
-        <div><button class='btn'  type='submit' name='manager'>Lista Manager</button></div>
-        <div><button class='btn'  type='submit' name='avansare'>Avansare</button></div>
-        <div><button class='btn' type='submit' name='retrogradare'>Retrogradare</button></div>
+        <div><button class='btnAdmin'  type='submit' name='del'>Delete</button></div>
+        <div><button class='btnAdmin'  type='submit' name='user'>Lista User</button></div>
+        <div><button class='btnAdmin'  type='submit' name='manager'>Lista Manager</button></div>
+        <div><button class='btnAdmin'  type='submit' name='avansare'>Avansare</button></div>
+        <div><button class='btnAdmin' type='submit' name='retrogradare'>Retrogradare</button></div>
     </div>
     </form>
-<table>Clienti
+<table class="tabelAdmin"><div id="clienti">Clienti:</div>
 <tr>
 <th>Select</th>
     <th>Rol</th>
@@ -33,8 +33,8 @@ $comenzi = searchComanda($conn, $_SESSION["userid"], true, 0);
         echo "<th>Nr.comenzi</th>";
     }
     ?>
-    
     <th>Ultima accesare</th>
+    <th>Numar accesari</th>
 
 </tr>
 <?php
@@ -54,13 +54,14 @@ foreach($all as $user){
    <td><input form='usdet' type='checkbox' name='select[]' value='$us'></td>
    <td>".$user['usersRol']."</td>
    <td>".$user['usersUsername']."</td>
-   <td>".$user['usersFirst']." ".$user['userLastName']."</td>
+   <td>".$user['usersFirst']." ".$user['usersLast']."</td>
    <td>".$user['usersEmail']."</td>";
    if($client === "user"){
     echo"<td>$comenzi</td>";
    }
    
    echo "<td>".$user['usersVisit']."</td>
+         <td>".$user['usersAccesari']."</td>
    </tr>";
    }
 } 

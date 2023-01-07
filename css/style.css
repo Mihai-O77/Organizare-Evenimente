@@ -163,7 +163,7 @@ margin-bottom: 20px;
 
 .msgError{
  font-size: 1.2rem;
- width: 350px;
+ width: 400px;
  margin: auto;
  color: red;
  padding:0 40px;
@@ -464,4 +464,27 @@ td input{
 .listcom div{
     width: 100%;
     padding: 5px;
+}
+
+.btnAdmin{
+   padding: 10px;
+   width: 200px;
+   font-size: 1.1rem;
+   background-color: burlywood;
+   border: none;
+   box-shadow: 0px 0px 0px 2px grey;
+   margin-top: 2px;
+   margin-left: 2px;
+   cursor: pointer; 
+}
+
+.btnAdmin:hover{
+    text-shadow: 1px 1px 2px rgb(22, 13, 3);
+    color: rgb(221, 221, 194);
+}
+
+#clienti{
+   padding-top: 50px;
+   font-size: 1.2rem;
+   font-weight: bold; 
 }
