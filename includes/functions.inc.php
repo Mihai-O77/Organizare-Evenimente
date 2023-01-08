@@ -364,7 +364,7 @@ function listprices($text){
 
 function displayComanda($serv, $text){
 $lines = file("$text");
-$listprices = listprices[$text];
+$listprices = listprices($text);
 $total = 0;
  if($serv !== "[]"){
   $servicii = json_decode($serv, true);
