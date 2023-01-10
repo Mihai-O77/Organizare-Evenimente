@@ -395,7 +395,7 @@ $total = 0;
 function verifServicii($serv){
   $verif_serv = ["Pachet mini", "Pachet mediu", "Pachet all remember", "Pachet standard", "Pachet profi",
   "Muzica pentru nunta traditionala", "Muzica pentru nunta moderna","All gen","Muzica de petrecere",
-  "Muzica pop dance","Muzica rock","Muzica etno","Muzica populara","Muzica instrumentala","Artificii",
+  "Muzica pop dance","Rock","Muzica etno","Muzica populara","Muzica instrumentala","Artificii",
   "Animatori","Aranjamente florare","Buchete nunta","Buchete cununie","Aranjamente baloane",
   "Cabina foto nunta","Candy bar","Ice cream bar","Cocktail bar","Tort nunta","Meniu 1","Meniu 2","Meniu 3",
   "Meniu 4","Decoratiuni botez","Muzica traditionala","Muzica moderna"];

@@ -22,11 +22,13 @@
 {"Candy bar": 780}
 {"Ice cream bar": 750}
 {"Cocktail bar": 940}
+{"Tort nunta": 600}
 {"Tort": 600}
 {"Meniu 1": 2350}
 {"Meniu 2": 2350}
 {"Meniu 3": 2350}
 {"Meniu 4": 2350}
-{"Decor biserica": 250}
 {"Decoratiuni botez": 380}
+{"Muzica traditionala": 1350}
+{"Muzica moderna": 1350}
 {"": 0}
