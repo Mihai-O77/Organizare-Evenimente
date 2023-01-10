@@ -30,7 +30,7 @@ include_once("header.php");
              alaturi de cei dragi cu un minimum de efort. Vei primi consultanta specializata 
              in materie de organizare de evenimente si te vei bucura de sfaturi si pareri
               avizate, care cu siguranta iti vor fi utile si te vor ajuta sa depasesti pragul 
-              emotiilor.</p>
+              emotiilor. <b>Pentru a incepe costumizarea evenimentelor trebuie sa va inregistrati. </b></p>
     </div>
 
     <div class="img-even">
