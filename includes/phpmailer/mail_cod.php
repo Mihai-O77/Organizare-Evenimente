@@ -35,10 +35,10 @@ try {
   $mail->Port       = 465;                   
   $mail->Username   = $username;  			// GMAIL username
   $mail->Password   = $password;            // GMAIL password
-  $mail->AddReplyTo('proiect.mihai.machete@gmail.com', 'Oprea Mihai Daniel');
+  $mail->AddReplyTo($fromm, $namefrom);
   $mail->AddAddress($to, $nume);
  
-  $mail->SetFrom('proiect.mihai.machete@gmail.com', 'Oprea Mihai Daniel');
+  $mail->SetFrom($fromm, $namefrom);
   $mail->Subject = $subiect;
   if($attach){
     $mail->AddAttachment($path);

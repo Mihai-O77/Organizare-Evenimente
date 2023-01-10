@@ -1,4 +1,4 @@
-{"Pachet mini": 315}
+{"Pachet mini": 310}
 {"Pachet mediu": 470}
 {"Pachet all remembers": 650}
 {"Pachet standard": 630}
@@ -29,3 +29,4 @@
 {"Meniu 4": 2350}
 {"Decor biserica": 250}
 {"Decoratiuni botez": 380}
+{"": 0}

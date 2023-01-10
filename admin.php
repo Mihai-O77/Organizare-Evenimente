@@ -76,7 +76,7 @@ if(isset($_POST['avansare'])){
     if(isset($_POST['select'])){
       $ids = $_POST['select'];  
     foreach($ids as $id){
-        $comenzi = searchComanda($conn, $id, false, 1);
+        $comenzi = searchComanda($conn, $id, false, 0);
         if($comenzi === false){
         retravansUser($conn, $roll, $id);
     }}}}
@@ -96,21 +96,11 @@ if(isset($_POST['avansare'])){
 ?>
 
 </table>
-
- <!-- <?php 
-if(isset($_POST['mail'])){
-    $message = "Ai primit un email !";
-    $_to = 'proiect.web.gusti@gmail.com';
-    $name = "Augustus";
-    $subject = "Test mail";
-    include_once"private/phpmailer/mail_cod.php";
-}
-?>  -->
 </section>
 
 
 
 
 <?php 
-include_once"footer.php";
+include_once("footer.php");
 ?>

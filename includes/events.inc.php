@@ -12,17 +12,20 @@ $array_decor = array();
 $array_catering = array();
 
 if(isset($_POST["cameraman"])){
- $cameraman = array("Cameraman" => $_POST["video"]);
+ $serv = verifServicii($_POST["video"]);
+ $cameraman = array("Cameraman" => $serv);
  $array_servici = array_merge($array_servici, $cameraman);
 }
 
 if(isset($_POST["fotograf"])){
- $fotograf = array("Fotograf" => $_POST["foto"]);
+ $serv = verifServicii($_POST["foto"]);   
+ $fotograf = array("Fotograf" => $serv);
  $array_servici = array_merge($array_servici, $fotograf);
 }
 
 if(isset($_POST["dj"])){
- $dj = array("Dj" => $_POST["djs"]);
+ $serv = verifServicii($_POST["djs"]);   
+ $dj = array("Dj" => $serv);
  $array_servici = array_merge($array_servici, $dj);
 }
 
@@ -31,7 +34,8 @@ if(isset($_POST["formatie"])){
     $musics = $_POST["music"];
     $music_type = "";
     foreach($musics as $music){
-        $music_type .= $music ."," ;
+        $serv = verifServicii($music);
+        $music_type .= $serv ."," ;
     }
     $music = rtrim($music_type, ",");
     $array_music = array("Formatie" => $music);
@@ -40,12 +44,14 @@ if(isset($_POST["formatie"])){
 }
 
 if(isset($_POST["artificii"])){
-    $artificii = array("Artificii" => $_POST["artificii"]);
+    $serv = verifServicii($_POST["artificii"]);
+    $artificii = array("Artificii" => $serv);
     $array_servici = array_merge($array_servici, $artificii);
 }
 
 if(isset($_POST["animatori"])){
-    $animatori = array("Animatori" => $_POST["animatori"]);
+    $serv = verifServicii($_POST["artificii"]);
+    $animatori = array("Animatori" => $serv);
     $array_servici = array_merge($array_servici, $animatori);
 }
 
@@ -53,29 +59,20 @@ if(isset($_POST["decor"])){
       $decors = $_POST["decor"];
       $decor_type = "";
       foreach($decors as $dec){
-          $decor_type .= $dec ."," ;
+          $serv = verifServicii($dec);
+          $decor_type .= $serv ."," ;
       }
       $decor = rtrim($decor_type, ",");
       $arraydecor = array("Decor" => $decor);
       $array_decor = array_merge($array_decor, $arraydecor);
 }
 
-if(isset($_POST["decor"])){
-    $decors = $_POST["decor"];
-    $decor_type = "";
-    foreach($decors as $dec){
-        $decor_type .= $dec ."," ;
-    }
-    $decor = rtrim($decor_type, ",");
-    $arraydecor = array("Decor" => $decor);
-    $array_decor = array_merge($array_decor, $arraydecor);
-}
-
 if(isset($_POST["mancare"])){
     $mancares = $_POST["mancare"];
     $mancare_type = "";
     foreach($mancares as $manc){
-        $mancare_type .= $manc ."," ;
+        $serv = verifServicii($manc);
+        $mancare_type .= $serv ."," ;
     }
     $mancare = rtrim($mancare_type, ",");
     $array_mancare = array("Catering" => $mancare);
@@ -83,7 +80,8 @@ if(isset($_POST["mancare"])){
 }
 
 if(isset($_POST["menu"])){
-    $menu = array("Meniu"=>$_POST["meniu"]);
+    $serv = verifServicii($_POST["meniu"]);
+    $menu = array("Meniu"=>$serv);
     $array_catering = array_merge($array_catering, $menu);
 }
 
@@ -113,14 +111,18 @@ if(isset($_POST["date"])){
    }
 }
 
-if(isset($_POST["event"])){  
-$event = $_POST["event"];
+if(isset($_POST["event"])){ 
+  if($event = verifEvent($_POST["event"])){   
 $userNunta = $_SESSION["userid"];
 $servicii = json_encode($array_servici);
 $decor = json_encode($array_decor);
 $catering = json_encode($array_catering);
-
 createEvents($conn, $userNunta, $servicii, $decor, $catering, $ndate, $event);
+}else{
+    header("location: ../index.php");
+    exit();
 }
+}
+
 }
 

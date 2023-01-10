@@ -196,7 +196,7 @@ function createEvents($conn, $username, $servicii, $decor, $catering, $data, $ev
   mysqli_stmt_bind_param($stmt, "ssssss", $username, $servicii, $decor, $catering, $data, $event);
   mysqli_stmt_execute($stmt);
   mysqli_stmt_close($stmt);
-  $cda = searchComanda($conn,$username,true,0);
+  $cda = searchComanda($conn,$username,true,0); 
   $email = $cda[0]['usersEmail'];
   $lname = $cda[0]['usersLast'];
   $fname = $cda[0]['usersFirst'];
@@ -207,10 +207,12 @@ function createEvents($conn, $username, $servicii, $decor, $catering, $data, $ev
         <p>Veti primi un email de confirmare !</p>";
         $to = $email;
         $name = $fname." ".$lname;
-        $subj = "Confirmare comanda";
+        $subj = "Inregistrare comanda";
         $attach = false;
+        $from = "proiect.mihai.machete@gmail.com";
+        $namefrom = "Mihai";
         $path = "";
-        sendMail($mesg,$to,$name,$subj,$path,$attach);
+        sendMail($mesg,$from,$to,$name,$subj,$path,$attach,$namefrom);
   header("location: ../profile.php");
   exit();  
 }
@@ -390,6 +392,29 @@ $total = 0;
  return $total;
 }
 
+function verifServicii($serv){
+  $verif_serv = ["Pachet mini", "Pachet mediu", "Pachet all remember", "Pachet standard", "Pachet profi",
+  "Muzica pentru nunta traditionala", "Muzica pentru nunta moderna","All gen","Muzica de petrecere",
+  "Muzica pop dance","Muzica rock","Muzica etno","Muzica populara","Muzica instrumentala","Artificii",
+  "Animatori","Aranjamente florare","Buchete nunta","Buchete cununie","Aranjamente baloane",
+  "Cabina foto nunta","Candy bar","Ice cream bar","Cocktail bar","Tort nunta","Meniu 1","Meniu 2","Meniu 3",
+  "Meniu 4","Decoratiuni botez","Muzica traditionala","Muzica moderna"];
+  
+  if(in_array($serv, $verif_serv)){
+      return $serv;
+  }else{
+      return false;
+  }
+}
+function verifEvent($event){
+  $verif_event = ["nunta", "botez","majorat","aniversare"];
+  if(in_array($event, $verif_event)){
+      return $event;
+  }else{
+      return "";
+  }
+}
+
 
 //functii manager
 
@@ -471,9 +496,11 @@ $mesg = "<h3>Comanda nr. $serie a fost confirmata !</h3>
 $to = $email;
 $name = $fname;
 $subj = "Confirmare comanda";
+$from = "proiect.mihai.machete@gmail.com";
+$namefrom = "Mihai";
 $path = "../meniuri/factura.pdf";
 $attach = true;
-sendMail($mesg,$to,$name,$subj,$path,$attach);      
+sendMail($mesg,$from,$to,$name,$subj,$path,$attach,$namefrom);      
        header("location: ../manager.php");
        exit();
 }
@@ -483,7 +510,7 @@ function anularecda($conn, $id){
   $email = $cda[0]['usersEmail'];
   $lname = $cda[0]['usersLast'];
   $fname = $cda[0]['usersFirst'];
-  $mesg ="<div><img src='../images/maillogo.jpeg' alt='Happy events'></div>
+  $mesg ="<div><img src=\"../images/maillogo.jpeg\" alt='Happy events'></div>
         <hr>
         <h3>".$fname.' '.$lname.", cererea dv. a fost anulata !</h3>
         <h4>Incercati sa faceti comanda din nou.</h4>
@@ -491,9 +518,11 @@ function anularecda($conn, $id){
         $to = $email;
         $name = $fname." ".$lname;
         $subj = "Anulare comanda";
+        $from = "proiect.mihai.machete@gmail.com";
+        $namefrom = "Mihai";
         $attach = false;
         $path = "";
-        sendMail($mesg,$to,$name,$subj,$path,$attach);
+        sendMail($mesg,$from,$to,$name,$subj,$path,$attach,$namefrom);
 $sql = "DELETE FROM events WHERE Id=?";
 $stmt = mysqli_stmt_init($conn);
   if(!mysqli_stmt_prepare($stmt, $sql)){
@@ -556,14 +585,16 @@ function retravansUser($conn, $roll, $id){
 
 //functii mail
 
-function sendMail($mesg,$_to,$name,$subj,$pathattach,$attachament){
+function sendMail($mesg,$from,$_to,$name,$subj,$pathattach,$attachament,$namefrom){
   $send = "yes";
   $mesaj = $mesg;
+  $fromm = $from;
   $email = $_to;
   $usernameul = $name;
   $subiect = $subj;
   $path = $pathattach;
   $attach = $attachament;
+  $namefrom = $namefrom;
   include_once ("phpmailer/mail_cod.php");
 }
 
@@ -678,11 +709,23 @@ function createPdf($conn,$id,$pdf,$lat,$text){
       }
       
   }
+  $curs = curs_valutar("euro");
+  $day = $curs["zi"];
+  $month = $curs["luna"];
+  $year = $curs["an"];
+  $cursvalutar = (float)$curs["cursval"];
+  $totallei = $cursvalutar*$prettotal;
+  $totallei = number_format($totallei, 2, ".", " ");
   $pdf -> SetFont('Arial', 'B', 15);
   $pdf->Cell(41+$lat/2,8,'Total plata ','LTB',1,'R',0);
   $pdf->SetXY(51+$lat/2,$y_save_c);
   $pdf->SetTextColor(80,150,255);
   $pdf->Cell($lat/12+$lat/3-30,8,$prettotal.' Euro','RTB',1,'R',0);
+  $pdf->SetTextColor(0);
+  $pdf -> SetFont('Arial', 'B', 10);
+  $pdf->Cell(11+$lat/4+2*$lat/3,4,"Curs valutar(BNR) la data $day $month $year: 1 euro = $cursvalutar lei","LRB",1,"L",0);
+  $pdf -> SetFont('Arial', 'B', 15);
+  $pdf->Cell(11+$lat/4+2*$lat/3,8,"Total plata:              $totallei lei","LRB",1,"R",0);
 }
 
 function nrFactura(){
@@ -694,4 +737,70 @@ function nrFactura(){
   $rnd = rand(10000000,99999999);
   $nr .= $rnd;
   return $nr;
+}
+
+//functii alt site
+
+function getPageContents($url) {
+  $user_agent='Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101 Firefox/81.0';
+  $options = array(
+      CURLOPT_CUSTOMREQUEST  =>"GET",        //set request type post or get
+      CURLOPT_POST           =>false,        //set to GET
+      CURLOPT_USERAGENT      => $user_agent, //set user agent
+      CURLOPT_COOKIEFILE     =>"cookie.txt", //set cookie file
+      CURLOPT_COOKIEJAR      =>"cookie.txt", //set cookie jar
+      CURLOPT_RETURNTRANSFER => true,     // return web page
+      CURLOPT_HEADER         => false,    // don't return headers
+      CURLOPT_FOLLOWLOCATION => true,     // follow redirects
+      CURLOPT_ENCODING       => "",       // handle all encodings
+      CURLOPT_AUTOREFERER    => true,     // set referer on redirect
+      CURLOPT_CONNECTTIMEOUT => 120,      // timeout on connect
+      CURLOPT_TIMEOUT        => 120,      // timeout on response
+      CURLOPT_MAXREDIRS      => 10,       // stop after 10 redirects
+  );
+  $ch = curl_init($url);
+  curl_setopt_array($ch, $options);
+  $content = curl_exec($ch);
+  $err = curl_errno($ch);
+  $errmsg = curl_error($ch);
+  $header = curl_getinfo($ch);
+  curl_close($ch);
+
+  $header['errno'] = $err;
+  $header['errmsg'] = $errmsg;
+  $header['content'] = $content;
+  return $header;
+}
+
+function curs_valutar($valuta) {
+  $valuta = strtolower($valuta);
+  $header = getPageContents("https://www.cursbnr.ro/curs-$valuta");
+  $html = $header['content'];
+  $doc = new DOMDocument();
+  @$doc->loadHTML($html);
+  $finder = new DomXPath($doc);
+  $titlu = $finder->query("/html/head/title")[0];
+   
+  if ($titlu->nodeValue == "Curs Euro - Curs EUR | Curs BNR") {
+      $node = $finder->query("/html/body/div[3]/div[1]/div[1]/main/div[2]/div[1]/div[1]/div[3]")[0];//div[1]/div[1]/div[2]//div[1]/div[1]/div[3]/table/td[1]
+      $val = $node->nodeValue;
+      $toks = explode(" ", $val);           
+      $day = $toks[7];
+      $month = $toks[8];            
+      $str = $toks[9];
+      $year = substr($str,0,4);
+      $cursval = substr($str,4,6);
+      
+      $params["zi"] = $day;
+      $params["luna"] = $month;
+      $params["an"] = $year;
+      $params["cursval"] = (float)$cursval;
+     
+      return $params;
+  } else {
+      $node = $finder->query("/html/head/meta[13]")[0];
+      $url = $node->getAttribute("content");
+      $toks = explode("/", $url);
+      return (int) $toks[count($toks) - 1];
+  }
 }

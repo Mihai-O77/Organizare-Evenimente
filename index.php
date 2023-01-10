@@ -35,7 +35,7 @@ include_once("header.php");
 
     <div class="img-even">
       <?php 
-      $evenimente = array("images/nunta.jpeg" => "nunta","images/botez.jpeg"=> "botez","images/majorat.jpeg"=> "majorat","images/copii.jpeg"=> "aniversare");
+      $evenimente = array("images/nunta.jpeg" => "nunta","images/botez.jpeg"=> "botez","images/majorat.jpeg"=> "majorat","images/aniversare.jpeg"=> "aniversare");
       $topnr = 20;
       $texts = array("nunta"=>"Nunta ta va fi un adevarat spectacol de care toti invitatii isi vor aduce aminte cu drag!",
       "botez"=>"Venirea pe lume a unui copil este un motiv de bucurie si trebuie sarbatorita corespunzator. Micutul tau merita un botez ca la carte...",
@@ -64,10 +64,26 @@ include_once("header.php");
      </div>
 </section>
 
-
-
-
-
+<section class="divcontact" id="divcontactul">
+       <form class="formcontact" action="includes/contact.inc.php" method="post">
+        <?php if(isset($_SESSION["username"])){ 
+               $name = $_SESSION["fname"]." ".$_SESSION["lname"];
+               $mail = $_SESSION["email"];
+          }
+          else{
+            $name = "";
+            $mail = "";
+          }?>
+         <div class="divflex inp"> 
+        <input type="text" name="nume" value="<?php echo $name ?>"  placeholder="Full name" value="sss">
+        <input type="email" name="email"value="<?php echo $mail ?>" placeholder="Email" value="sss">
+        <input type="text" name="subiect" placeholder="Subiect">
+         </div>
+        <textarea name="mesaj" id="ctcfooter" placeholder="Puteti sa ne contactati transmitandu-ne mesajul aici" cols="130" rows="15"></textarea>
+        <div class="g-recaptcha captcha" data-sitekey="6Ldh2twjAAAAAMs1L40KgiJtld0jzXWOHYy_fCuV"></div>
+        <button type="submit" name="sendcontact" id="btncontact">Trimite mesajul</button>
+       </form>
+</section>
 
 
 <?php

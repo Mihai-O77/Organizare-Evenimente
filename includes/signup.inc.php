@@ -1,5 +1,5 @@
 <?php
-$secretkey = "6Ldh2twjAAAAAKE7TccF_TEvc6A-Z-CwUsRThlfn";
+require_once ("captcha.php");
 
 if(isset($_POST["submit"])){
   if(isset($_POST["g-recaptcha-response"]) && !empty($_POST["g-recaptcha-response"])){

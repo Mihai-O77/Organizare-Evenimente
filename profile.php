@@ -8,7 +8,7 @@ if(!$_SESSION["username"] || $_SESSION["rol"]!=="user"){
 require_once("includes/connection.db.php");
 require_once("includes/functions.inc.php");
 ?>
-
+<section>
 <div class="divflex profile">
 
 <div class="menuprofile">
@@ -41,7 +41,7 @@ if(isset($_POST["cont"]) || isset($_POST["updatecont"])){
 
 
 if(isset($_POST["modifica"]) || isset($_GET["error"])){?>
-      <section id='modifica'>
+      <div id='modifica'>
       <div class='login updatecont'>
         <form  action='includes/profile.inc.php' method='post'>
 
@@ -69,7 +69,7 @@ if(isset($_POST["modifica"]) || isset($_GET["error"])){?>
 
         </form>
       </div>
-      </section>
+</div>
       <?php if(isset($_GET["error"])){
         switch($_GET["error"]){
             case "emptyinput": echo "Nu ati completat un camp"; break;
@@ -121,8 +121,14 @@ if(isset($_POST['detalii'])){
  $tot = displayComanda($valobiect["Servicii"], "meniuri/preturi.txt") +
         displayComanda($valobiect["Decor"], "meniuri/preturi.txt") +
         displayComanda($valobiect["Catering"], "meniuri/preturi.txt");
+ $curs = curs_valutar("euro");
+ $day = $curs["zi"];
+ $month = $curs["luna"];
+ $year = $curs["an"];
+ $cursvalutar = $curs["cursval"];      
  ?>
  <div><span>Total: <?php echo"$tot" ?> Euro</span></div>
+ <div style="font-size: 15px;">Curs valutar(BNR) in data <?php echo"$day $month $year"?>: 1 euro = <?php echo"$cursvalutar" ?>lei</div>
 </div>
 
 </div>
@@ -130,8 +136,8 @@ if(isset($_POST['detalii'])){
 <?php
 }
 ?>
-
+</section>
 
 <?php
-include_once("header.php");
+include_once("footer.php");
 ?>
