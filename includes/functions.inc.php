@@ -397,7 +397,7 @@ function verifServicii($serv){
   "Muzica pentru nunta traditionala", "Muzica pentru nunta moderna","All gen","Muzica de petrecere",
   "Muzica pop dance","Rock","Muzica etno","Muzica populara","Muzica instrumentala","Artificii",
   "Animatori","Aranjamente florare","Buchete nunta","Buchete cununie","Aranjamente baloane",
-  "Cabina foto nunta","Candy bar","Ice cream bar","Cocktail bar","Tort nunta","Meniu 1","Meniu 2","Meniu 3",
+  "Cabina foto nunta","Candy bar","Ice cream bar","Cocktail bar","Tort nunta","Tort","Meniu 1","Meniu 2","Meniu 3",
   "Meniu 4","Decoratiuni botez","Muzica traditionala","Muzica moderna"];
   
   if(in_array($serv, $verif_serv)){

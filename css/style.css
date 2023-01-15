@@ -541,3 +541,42 @@ td input{
 .ahreffooter a:hover{
     font-size: 1.3rem;
 }
+
+input[type="checkbox"] {
+    position: absolute; 
+    height: 0px;
+    width: 0px;
+  }
+
+input[type="checkbox"]:checked::before{
+    content: "";
+    position: absolute;
+    top: 2px;
+    left: -20px;
+    width: 8px;
+    height: 12px;
+    border-bottom: 3px solid green;
+    border-right: 3px solid green;
+    transform: rotate(45deg);
+  }
+  input[type="radio"] {
+    position: relative; 
+    border: none;
+    height: 0px;
+    width: 13px;
+  }
+    input[type="radio"]:checked::before {
+      content: "";
+     position: absolute; 
+     top: -13px;
+      left: 0px;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      border-bottom: 4px solid green;
+      border-right: 4px solid green;
+    }
+
+ol li{
+    list-style-type: none;
+}

@@ -40,7 +40,7 @@ include_once("header.php");
       $texts = array("nunta"=>"Nunta ta va fi un adevarat spectacol de care toti invitatii isi vor aduce aminte cu drag!",
       "botez"=>"Venirea pe lume a unui copil este un motiv de bucurie si trebuie sarbatorita corespunzator. Micutul tau merita un botez ca la carte...",
       "majorat"=>"Ziua in care devii major nu se uita niciodata, asa ca trebuie sa fie perfecta! Toti adolescentii asteapta cu nerabdare sa implineasca frumoasa varsta de 18 ani, iar cand acest lucru se intampla, isi doresc ca petrecerea lor sa fie de neuitat.",
-      "aniversare"=>"Cei mici vor avea parte de toata distractia. Nu vor avea cum sa se plictiseasca vreo secunda atata timp cat se afla in preajma animatorilor pentru petreceri copii.",
+      "aniversare"=>"Atunci cand vrei sa-ti sarbatoresti ziua de nastere, aniversarea casatoriei, majoratul sau vrei sa organizezi o reuniune la care sa participe colegii de liceu, contacteaza-ne si ne vom asigura ca totul va fi la superlativ!",
       "conferinte"=>"Sala de conferinte...",);
       for($i=0; $i< sizeof($evenimente);$i++){
         $imgsrc = array_keys($evenimente)[$i]; 
