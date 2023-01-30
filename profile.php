@@ -85,7 +85,9 @@ if(isset($_POST["modifica"]) || isset($_GET["error"])){?>
 if(isset($_POST["comenzi"])){
   $comenzi = searchComanda($conn, $_SESSION["userid"], true, 0);?>
   <div class='datecont comenzi'> <h2>Comenzile mele</h2>
-  <?php foreach($comenzi as $com){
+  <?php 
+  if($comenzi){
+  foreach($comenzi as $com){
   $raspuns = listaComenzi($com);
   // $result = [$seria, $dateEv, $comJson, $status, $rest, $cdadata];
   ?>
@@ -99,9 +101,12 @@ if(isset($_POST["comenzi"])){
                   <div><?php echo "$raspuns[4]";?></div>
                   </div> 
                   </div>
-  <?php } ?>
+  <?php }}
+else{
+ echo "<h3>Nu aveti comenzi</h3>"; 
+} ?>
   </div>
-        
+       
 <?php } 
 if(isset($_POST['detalii'])){
   $comz = $_POST['detalii'];
