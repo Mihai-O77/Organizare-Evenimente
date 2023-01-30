@@ -51,7 +51,7 @@ foreach($all as $user){
     $us = $user['usersId'];
     $comenzi = searchComanda($conn, $us, false, 0);
    echo "<tr>
-   <td><input form='usdet' type='checkbox' name='select[]' value='$us'></td>
+   <td><input id='usersel' form='usdet' type='checkbox' name='select[]' value='$us'></td>
    <td>".$user['usersRol']."</td>
    <td>".$user['usersUsername']."</td>
    <td>".$user['usersFirst']." ".$user['usersLast']."</td>

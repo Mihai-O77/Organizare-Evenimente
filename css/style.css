@@ -580,3 +580,9 @@ input[type="checkbox"]:checked::before{
 ol li{
     list-style-type: none;
 }
+
+#usersel{
+    position: static;
+    height: 20px;
+    width: 20px;
+}
